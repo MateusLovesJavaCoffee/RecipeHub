@@ -44,21 +44,21 @@ public interface IngredientOpenApi {
     })
     ResponseEntity<IngredientResponse> updateIngredient(UpdateIngredientData request);
 
-    @Operation(
-            summary = "Update the photo of an Ingredient by its identifier",
-            description = "Atualiza a foto de um ingrediente, associando a imagem fornecida ao ingrediente identificado pelo ID."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Foto do ingrediente atualizada com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição malformada"),
-            @ApiResponse(responseCode = "404", description = "Ingrediente não encontrado"),
-            @ApiResponse(responseCode = "422", description = "Erro de validação"),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
-    })
-    ResponseEntity<Void> updateIngredientPhoto(
-            @Parameter(description = "ID do ingrediente", required = true) @PathVariable Long ingredientId,
-            @Parameter(description = "Arquivo da foto do ingrediente", required = true) @RequestPart MultipartFile file
-    );
+//    @Operation(
+//            summary = "Update the photo of an Ingredient by its identifier",
+//            description = "Atualiza a foto de um ingrediente, associando a imagem fornecida ao ingrediente identificado pelo ID."
+//    )
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Foto do ingrediente atualizada com sucesso"),
+//            @ApiResponse(responseCode = "400", description = "Requisição malformada"),
+//            @ApiResponse(responseCode = "404", description = "Ingrediente não encontrado"),
+//            @ApiResponse(responseCode = "422", description = "Erro de validação"),
+//            @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+//    })
+//    ResponseEntity<Void> updateIngredientPhoto(
+//            @Parameter(description = "ID do ingrediente", required = true) @PathVariable Long ingredientId,
+//            @Parameter(description = "Arquivo da foto do ingrediente", required = true) @RequestPart MultipartFile file
+//    );
 
     @Operation(
             summary = "Delete an Ingredient by its identifier",
@@ -98,6 +98,6 @@ public interface IngredientOpenApi {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     ResponseEntity<Page<IngredientResponse>> listAllIngredients(
-            @Parameter(description = "Página da consulta", required = false) Pageable pageable
+            @Parameter(hidden = true)Pageable pageable
     );
 }
