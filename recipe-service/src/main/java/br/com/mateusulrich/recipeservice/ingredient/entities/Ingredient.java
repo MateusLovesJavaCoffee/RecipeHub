@@ -1,6 +1,6 @@
-package br.com.mateusulrich.recipeservice.ingredient.persistence;
+package br.com.mateusulrich.recipeservice.ingredient.entities;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import br.com.mateusulrich.recipeservice.ingredient.enums.IngredientCategory;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,13 +8,13 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity(name = "Ingredient")
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Table(name = "ingredients")
-public class IngredientJpaEntity {
+public class Ingredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,18 +40,12 @@ public class IngredientJpaEntity {
             joinColumns = @JoinColumn(name = "ingredient_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_unit_id")
     )
-    private Set<IngredientUnitJpaEntity> possibleUnits;
+    private Set<IngredientUnit> possibleUnits;
 
-    public static IngredientJpaEntity newIngredient(String name, String shortDescription, IngredientCategory category, Set<IngredientUnitJpaEntity> possibleUnits) {
-        return new IngredientJpaEntity(
-                null, name, null, shortDescription, category, possibleUnits);
-
-    }
-
-    public Set<IngredientUnitJpaEntity> getPossibleUnits() {
+    public Set<IngredientUnit> getPossibleUnits() {
         return possibleUnits != null ? possibleUnits : new HashSet<>();
     }
-    public void addPossibleUnit(final IngredientUnitJpaEntity unit) {
+    public void addPossibleUnit(final IngredientUnit unit) {
         if (possibleUnits != null) {
             this.possibleUnits.add(unit);
         }
@@ -62,7 +56,7 @@ public class IngredientJpaEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IngredientUnitJpaEntity that = (IngredientUnitJpaEntity) o;
+        IngredientUnit that = (IngredientUnit) o;
         return Objects.equals(getId(), that.getId());
     }
 

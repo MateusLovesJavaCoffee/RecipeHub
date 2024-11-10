@@ -1,4 +1,4 @@
-package br.com.mateusulrich.recipeservice.ingredient.persistence;
+package br.com.mateusulrich.recipeservice.ingredient.enums;
 
 public enum IngredientCategory {
 

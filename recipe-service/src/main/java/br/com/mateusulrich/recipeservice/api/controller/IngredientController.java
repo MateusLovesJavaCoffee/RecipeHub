@@ -72,7 +72,7 @@ public class IngredientController implements IngredientOpenApi {
     @Override
     @GetMapping(value = "/{ingredientId}")
     public ResponseEntity<IngredientResponse> findIngredientById(@PathVariable Long ingredientId) {
-        final IngredientResponse response = ingredientService.getIngredientById(ingredientId);
+        final IngredientResponse response = ingredientService.findByIdOrThrowNotFound(ingredientId);
         return ResponseEntity.ok(response);
     }
 

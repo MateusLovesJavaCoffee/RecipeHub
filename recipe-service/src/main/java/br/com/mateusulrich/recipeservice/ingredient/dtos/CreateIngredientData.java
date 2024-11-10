@@ -1,6 +1,6 @@
 package br.com.mateusulrich.recipeservice.ingredient.dtos;
 
-import br.com.mateusulrich.recipeservice.ingredient.persistence.IngredientCategory;
+import br.com.mateusulrich.recipeservice.ingredient.enums.IngredientCategory;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;

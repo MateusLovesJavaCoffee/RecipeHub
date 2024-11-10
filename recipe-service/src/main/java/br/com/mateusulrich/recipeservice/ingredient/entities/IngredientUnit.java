@@ -1,4 +1,4 @@
-package br.com.mateusulrich.recipeservice.ingredient.persistence;
+package br.com.mateusulrich.recipeservice.ingredient.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "ingredient_units")
-public class IngredientUnitJpaEntity {
+public class IngredientUnit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class IngredientUnitJpaEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IngredientUnitJpaEntity that = (IngredientUnitJpaEntity) o;
+        IngredientUnit that = (IngredientUnit) o;
         return Objects.equals(getId(), that.getId());
     }
 
