@@ -33,7 +33,10 @@ public class Ingredient {
     @Enumerated(EnumType.STRING)
     private IngredientCategory category;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
             name = "possible_units",
             joinColumns = @JoinColumn(name = "ingredient_id"),
