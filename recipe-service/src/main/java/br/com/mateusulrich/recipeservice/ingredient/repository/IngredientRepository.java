@@ -16,7 +16,7 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
     Page<Ingredient> findAll(Specification<Ingredient> whereClause, Pageable page);
 
-    @Query("select i from Ingredient i join fetch i.possibleUnits where i.id = :id")
+    @Query("select i from Ingredient i left join fetch i.possibleUnits where i.id = :id")
     Optional<Ingredient> findIngredientWithUnits(@Param("id") Long id);
 
     boolean existsByName(@Param("name") String name);

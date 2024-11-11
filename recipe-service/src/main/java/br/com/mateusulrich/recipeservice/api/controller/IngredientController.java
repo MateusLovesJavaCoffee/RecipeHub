@@ -1,13 +1,11 @@
 package br.com.mateusulrich.recipeservice.api.controller;
 
 import br.com.mateusulrich.recipeservice.api.openapi.IngredientOpenApi;
-import br.com.mateusulrich.recipeservice.ingredient.dtos.CreateIngredientData;
+import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientDto;
 import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
-import br.com.mateusulrich.recipeservice.ingredient.dtos.UpdateIngredientData;
 import br.com.mateusulrich.recipeservice.ingredient.service.IngredientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,7 +31,7 @@ public class IngredientController implements IngredientOpenApi {
             produces = APPLICATION_JSON_VALUE,
             consumes = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<IngredientResponse> addIngredient(@Valid @RequestBody CreateIngredientData data) {
+    public ResponseEntity<IngredientResponse> addIngredient(@Valid @RequestBody IngredientDto data) {
         log.debug("POST createIngredient data received {} ", data.toString());
         final IngredientResponse response = ingredientService.createIngredient(data);
 
@@ -44,9 +42,9 @@ public class IngredientController implements IngredientOpenApi {
     }
 
     @Override
-    @PutMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<IngredientResponse> updateIngredient(@RequestBody @Valid UpdateIngredientData data) {
-        ingredientService.updateIngredient(data);
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<IngredientResponse> updateIngredient(@PathVariable(name = "id") Long id, @RequestBody @Valid IngredientDto data) {
+        ingredientService.updateIngredient(id, data);
         return ResponseEntity.noContent().build();
     }
 

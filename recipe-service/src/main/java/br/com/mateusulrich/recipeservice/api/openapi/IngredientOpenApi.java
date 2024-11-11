@@ -1,8 +1,7 @@
 package br.com.mateusulrich.recipeservice.api.openapi;
 
-import br.com.mateusulrich.recipeservice.ingredient.dtos.CreateIngredientData;
-import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
-import br.com.mateusulrich.recipeservice.ingredient.dtos.UpdateIngredientData;
+import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientDto;
+import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Ingredient", description = "A API de Ingredientes permite a criação, leitura, atualização e exclusão de ingredientes utilizados em receitas.")
 public interface IngredientOpenApi {
@@ -29,7 +26,7 @@ public interface IngredientOpenApi {
             @ApiResponse(responseCode = "422", description = "Erro de validação"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    ResponseEntity<IngredientResponse> addIngredient(CreateIngredientData request);
+    ResponseEntity<IngredientResponse> addIngredient(IngredientDto request);
 
     @Operation(
             summary = "Update an existing Ingredient by its identifier",
@@ -42,7 +39,7 @@ public interface IngredientOpenApi {
             @ApiResponse(responseCode = "422", description = "Erro de validação"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    ResponseEntity<IngredientResponse> updateIngredient(UpdateIngredientData request);
+    ResponseEntity<IngredientResponse> updateIngredient(Long id, IngredientDto request);
 
 //    @Operation(
 //            summary = "Update the photo of an Ingredient by its identifier",

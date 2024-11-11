@@ -1,9 +1,8 @@
 package br.com.mateusulrich.recipeservice.ingredient.service.impl;
 
 import br.com.mateusulrich.recipeservice.common.exception.*;
-import br.com.mateusulrich.recipeservice.ingredient.dtos.CreateIngredientData;
+import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientDto;
 import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
-import br.com.mateusulrich.recipeservice.ingredient.dtos.UpdateIngredientData;
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
 import br.com.mateusulrich.recipeservice.ingredient.entities.IngredientUnit;
 import br.com.mateusulrich.recipeservice.ingredient.mapper.IngredientMapper;
@@ -12,7 +11,6 @@ import br.com.mateusulrich.recipeservice.ingredient.repository.IngredientUnitRep
 import br.com.mateusulrich.recipeservice.ingredient.service.IngredientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -44,12 +41,13 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @Transactional
-    public IngredientResponse createIngredient(final CreateIngredientData data) {
-        Set<Long> unitIds = data.units();
+    public IngredientResponse createIngredient(IngredientDto data) {
+        Set<Long> unitIds = data.possibleUnits();
         Set<IngredientUnit> ingredientUnits = unitRepo.findAllByIdIn(unitIds);
         assertExistsIds(ingredientUnits, unitIds);
         assertNameDoesNotExist(data.name());
-        Ingredient ingredient = ingredientMapper.fromDtoToEntity(data);
+        Ingredient ingredient = ingredientMapper.fromCreationDataToEntity(data);
+        ingredient.setPossibleUnits(ingredientUnits);
         ingredientRepository.save(ingredient);
 
         return ingredientMapper.toIngredientResponse(ingredient);
@@ -57,28 +55,26 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @Transactional
-    public IngredientResponse updateIngredient(final UpdateIngredientData data) {
-        Ingredient ingredient = ingredientRepository.findIngredientWithUnits(data.id())
-                .orElseThrow(() -> NotFoundException.with(Ingredient.class, data.id()));
+    public IngredientResponse updateIngredient(Long id, IngredientDto data) {
+        Ingredient ingredient = ingredientRepository.findIngredientWithUnits(id)
+                .orElseThrow(() -> NotFoundException.with(Ingredient.class, id));
 
-        Set<Long> unitIds = data.units();
+        Set<Long> unitIds = data.possibleUnits();
         Set<IngredientUnit> ingredientUnits = unitRepo.findAllByIdIn(unitIds);
 
         assertExistsIds(ingredientUnits, unitIds);
-        assertNameDoesNotExist(data.name());
 
-
-        Set<IngredientUnit> toAdd = new HashSet<>(ingredientUnits);
-        toAdd.removeAll(ingredient.getPossibleUnits());
-
-        for (IngredientUnit unit : toAdd) {
-            ingredient.addPossibleUnit(unit);
+        if (!Objects.equals(data.name(), ingredient.getName())) {
+            assertNameDoesNotExist(data.name());
         }
 
-        ingredient.setName(data.name());
-        ingredient.setShortDescription(data.description());
-        ingredient.setCategory(data.category());
+        ingredientMapper.update(ingredient, data);
 
+        ingredient.getPossibleUnits().clear();
+        for (IngredientUnit unit : ingredientUnits) {
+            ingredient.addPossibleUnit(unit);
+        }
+        ingredientRepository.save(ingredient);
         return ingredientMapper.toIngredientResponse(ingredient);
     }
 
@@ -99,7 +95,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     @Transactional(readOnly = true)
     public Page<IngredientResponse> listAllIngredients(Pageable pageable) {
-        return ingredientRepository.findAll(pageable).map(IngredientResponse::from);
+        return ingredientRepository.findAll(pageable).map(ingredientMapper::toIngredientResponse);
     }
 
     private void assertNameDoesNotExist(String name) {

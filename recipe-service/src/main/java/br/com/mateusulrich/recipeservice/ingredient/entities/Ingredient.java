@@ -11,7 +11,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Table(name = "ingredients")
 public class Ingredient {
@@ -50,6 +49,12 @@ public class Ingredient {
             this.possibleUnits.add(unit);
         }
 
+    }
+
+    public Ingredient(String name, String shortDescription, IngredientCategory category) {
+        this.name = name;
+        this.shortDescription = shortDescription;
+        this.category = category;
     }
 
     @Override
