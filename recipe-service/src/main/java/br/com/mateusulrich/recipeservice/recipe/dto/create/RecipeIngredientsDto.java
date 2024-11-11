@@ -1,6 +1,4 @@
-package br.com.mateusulrich.recipeservice.recipe.dto;
-
-import lombok.Value;
+package br.com.mateusulrich.recipeservice.recipe.dto.create;
 
 import java.io.Serializable;
 

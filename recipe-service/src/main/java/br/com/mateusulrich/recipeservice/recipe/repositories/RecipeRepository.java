@@ -1,0 +1,23 @@
+package br.com.mateusulrich.recipeservice.recipe.repositories;
+
+import br.com.mateusulrich.recipeservice.recipe.jpa.Recipe;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface RecipeRepository extends JpaRepository<Recipe, Long> {
+
+    @Query(value = """
+        select r
+        from Recipe r
+        left join fetch r.recipeSteps
+        left join fetch r.ingredientCompositions ic
+        left join fetch ic.ingredient
+        where r.id = :id
+""")
+    Optional<Recipe> findById(@Param("id") Long id);
+}

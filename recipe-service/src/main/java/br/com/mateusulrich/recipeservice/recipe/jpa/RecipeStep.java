@@ -24,7 +24,7 @@ public class RecipeStep {
     @Column(name = "step_description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Recipe recipe;
 
     @Override

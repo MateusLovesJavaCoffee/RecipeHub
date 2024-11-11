@@ -1,10 +1,10 @@
 package br.com.mateusulrich.recipeservice.api.openapi;
 
-import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientDto;
 import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
-import br.com.mateusulrich.recipeservice.recipe.dto.CreateRecipeData;
+import br.com.mateusulrich.recipeservice.recipe.dto.input.RecipeInputData;
 import br.com.mateusulrich.recipeservice.recipe.dto.RecipeResponse;
-import br.com.mateusulrich.recipeservice.recipe.dto.UpdateRecipeData;
+import br.com.mateusulrich.recipeservice.recipe.dto.retrieve.GetRecipeResponse;
+import br.com.mateusulrich.recipeservice.recipe.dto.update.UpdateRecipeData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,7 +31,7 @@ public interface RecipeOpenApi {
             @ApiResponse(responseCode = "422", description = "Erro de validação"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    ResponseEntity<RecipeResponse> createRecipe(CreateRecipeData data);
+    ResponseEntity<RecipeResponse> createRecipe(RecipeInputData data);
 
     @Operation(
             summary = "Update an existing Ingredient by its identifier",
@@ -44,7 +44,7 @@ public interface RecipeOpenApi {
             @ApiResponse(responseCode = "422", description = "Erro de validação"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    ResponseEntity<RecipeResponse> updateRecipe(Long id, UpdateRecipeData data);
+    ResponseEntity<RecipeResponse> updateRecipe(Long id, RecipeInputData data);
 
 
     @Operation(
@@ -57,7 +57,7 @@ public interface RecipeOpenApi {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     ResponseEntity<Void> deleteRecipeById(
-            @Parameter(description = "ID da Receita", required = true) @PathVariable Long recipeId
+            @Parameter(description = "ID da Receita", required = true) Long recipeId
     );
 
     @Operation(
@@ -69,8 +69,8 @@ public interface RecipeOpenApi {
             @ApiResponse(responseCode = "404", description = "Ingrediente não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    ResponseEntity<IngredientResponse> findRecipeById(
-            @Parameter(description = "ID da Receita", required = true) @PathVariable Long ingredientId
+    ResponseEntity<GetRecipeResponse> findRecipeById(
+            @Parameter(description = "ID da Receita", required = true)Long recipeId
     );
 
     @GetMapping

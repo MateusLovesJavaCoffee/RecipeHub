@@ -1,4 +1,4 @@
-package br.com.mateusulrich.recipeservice.recipe.dto;
+package br.com.mateusulrich.recipeservice.recipe.dto.retrieve;
 
 import java.util.List;
 

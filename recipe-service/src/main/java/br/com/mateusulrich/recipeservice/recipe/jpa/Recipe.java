@@ -6,8 +6,6 @@ import br.com.mateusulrich.recipeservice.recipe.enums.Difficulty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.NaturalIdCache;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -18,10 +16,10 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "recipes")
-@NaturalIdCache
-@org.hibernate.annotations.Cache(
-        usage = CacheConcurrencyStrategy.READ_WRITE
-)
+//@NaturalIdCache
+//@org.hibernate.annotations.Cache(
+//        usage = CacheConcurrencyStrategy.READ_WRITE
+//)
 public class Recipe {
 
     @Id
@@ -82,7 +80,6 @@ public class Recipe {
         this.title = title;
         this.description = description;
         this.preparationMinutes = preparationMinutes;
-        this.readyInMinutes = preparationMinutes + cookingMinutes;
         this.cookingMinutes = cookingMinutes;
         this.servings = servings;
         this.difficulty = difficulty;
@@ -91,6 +88,7 @@ public class Recipe {
 
     @PrePersist
     void onPersist() {
+        this.setReadyInMinutes(this.cookingMinutes + this.preparationMinutes);
         if (active == null || !active.equals(Boolean.TRUE)) {
             active = false;
             publishedAt = null;
@@ -101,6 +99,7 @@ public class Recipe {
 
     @PreUpdate
     void onUpdate() {
+        this.setReadyInMinutes(this.cookingMinutes + this.preparationMinutes);
         if (active.equals(Boolean.FALSE)) {
             active = false;
             updatedAt = Instant.now();
@@ -136,6 +135,52 @@ public class Recipe {
             }
         }
     }
+
+    public Recipe setEstimatedCost(int estimatedCost) {
+        this.estimatedCost = estimatedCost;
+        return this;
+    }
+
+    public Recipe setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+        return this;
+    }
+
+    public Recipe setServings(int servings) {
+        this.servings = servings;
+        return this;
+    }
+
+    public Recipe setCookingMinutes(Integer cookingMinutes) {
+        this.cookingMinutes = cookingMinutes;
+        return this;
+    }
+
+    public Recipe setReadyInMinutes(int readyInMinutes) {
+        this.readyInMinutes = readyInMinutes;
+        return this;
+    }
+
+    public Recipe setPreparationMinutes(int preparationMinutes) {
+        this.preparationMinutes = preparationMinutes;
+        return this;
+    }
+
+    public Recipe setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public Recipe setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+        return this;
+    }
+
+    public Recipe setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -2,41 +2,51 @@ package br.com.mateusulrich.recipeservice.api.controller;
 
 import br.com.mateusulrich.recipeservice.api.openapi.RecipeOpenApi;
 import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
-import br.com.mateusulrich.recipeservice.recipe.dto.CreateRecipeData;
+import br.com.mateusulrich.recipeservice.recipe.dto.input.RecipeInputData;
 import br.com.mateusulrich.recipeservice.recipe.dto.RecipeResponse;
-import br.com.mateusulrich.recipeservice.recipe.dto.UpdateRecipeData;
+import br.com.mateusulrich.recipeservice.recipe.dto.retrieve.GetRecipeResponse;
+import br.com.mateusulrich.recipeservice.recipe.dto.update.UpdateRecipeData;
 import br.com.mateusulrich.recipeservice.recipe.service.RecipeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/recipes")
+@RequiredArgsConstructor
 public class RecipeController implements RecipeOpenApi {
-    private final RecipeService recipeService;
+
+    private final RecipeService service;
 
     @Override
     @PostMapping
-    public ResponseEntity<RecipeResponse> createRecipe(CreateRecipeData data) {
-        return null;
+    public ResponseEntity<RecipeResponse> createRecipe(@Valid @RequestBody RecipeInputData data) {
+        RecipeResponse response = service.save(data);
+        return ResponseEntity.created(URI.create("/recipes/" + response.id())).body(response);
+    }
+    @Override
+    @PutMapping("/{recipeId}")
+    public ResponseEntity<RecipeResponse> updateRecipe(@PathVariable Long recipeId, @RequestBody RecipeInputData data) {
+        RecipeResponse response = service.update(recipeId, data);
+        return ResponseEntity.ok().body(response);
     }
 
     @Override
-    public ResponseEntity<RecipeResponse> updateRecipe(Long id, UpdateRecipeData data) {
-        return null;
+    @DeleteMapping("/{recipeId}")
+    public ResponseEntity<Void> deleteRecipeById(@PathVariable Long recipeId) {
+        service.delete(recipeId);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
-    public ResponseEntity<Void> deleteRecipeById(Long recipeId) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<IngredientResponse> findRecipeById(Long ingredientId) {
-        return null;
+    @GetMapping("/{recipeId}")
+    public ResponseEntity<GetRecipeResponse> findRecipeById(@PathVariable Long recipeId) {
+        return ResponseEntity.ok(service.getById(recipeId));
     }
 
     @Override

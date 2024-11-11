@@ -12,7 +12,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
-@Table(name = "recipe_ingredient_comp")
+@Table(name = "recipe_ingredient_composition")
 public class RecipeIngredientComposition {
 
     @EmbeddedId
