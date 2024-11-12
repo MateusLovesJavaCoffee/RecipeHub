@@ -1,4 +1,4 @@
-package br.com.mateusulrich.recipeservice.recipe.dto.create;
+package br.com.mateusulrich.recipeservice.recipe.dto.input;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;

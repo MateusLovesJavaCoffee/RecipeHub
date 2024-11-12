@@ -1,7 +1,7 @@
 package br.com.mateusulrich.recipeservice.recipe.dto.retrieve;
 
 import br.com.mateusulrich.recipeservice.recipe.dto.RecipeIngredientCompData;
-import br.com.mateusulrich.recipeservice.recipe.dto.create.CreateRecipeStepData;
+import br.com.mateusulrich.recipeservice.recipe.dto.input.RecipeStepInput;
 import br.com.mateusulrich.recipeservice.recipe.enums.Difficulty;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -23,7 +23,7 @@ public record GetRecipeResponse(
         int estimatedCost,
         Instant publishedAt,
         List<RecipeIngredientCompData> recipeIngredients,
-        List<CreateRecipeStepData> recipeSteps
+        List<RecipeStepInput> recipeSteps
 
 ) implements Serializable {
 }

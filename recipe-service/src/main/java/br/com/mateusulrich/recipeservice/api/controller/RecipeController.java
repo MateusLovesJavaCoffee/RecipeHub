@@ -5,7 +5,6 @@ import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
 import br.com.mateusulrich.recipeservice.recipe.dto.input.RecipeInputData;
 import br.com.mateusulrich.recipeservice.recipe.dto.RecipeResponse;
 import br.com.mateusulrich.recipeservice.recipe.dto.retrieve.GetRecipeResponse;
-import br.com.mateusulrich.recipeservice.recipe.dto.update.UpdateRecipeData;
 import br.com.mateusulrich.recipeservice.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

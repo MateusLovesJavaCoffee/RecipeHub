@@ -1,14 +1,12 @@
 package br.com.mateusulrich.recipeservice.recipe.mapper;
 
 import br.com.mateusulrich.recipeservice.recipe.dto.RecipeIngredientCompData;
-import br.com.mateusulrich.recipeservice.recipe.dto.create.CreateRecipeStepData;
+import br.com.mateusulrich.recipeservice.recipe.dto.input.RecipeStepInput;
 import br.com.mateusulrich.recipeservice.recipe.dto.input.RecipeInputData;
 import br.com.mateusulrich.recipeservice.recipe.dto.RecipeResponse;
 import br.com.mateusulrich.recipeservice.recipe.dto.retrieve.GetRecipeResponse;
 import br.com.mateusulrich.recipeservice.recipe.jpa.Recipe;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 
 @Component
 public class RecipeMapper {
@@ -67,7 +65,7 @@ public class RecipeMapper {
                     recipe.getPublishedAt(),
                     recipe.getIngredientCompositions().stream().map(RecipeIngredientCompData::new).toList(),
                     recipe.getRecipeSteps().stream().map(
-                            x -> new CreateRecipeStepData(x.getStepNumber(), x.getDescription())
+                            x -> new RecipeStepInput(x.getStepNumber(), x.getDescription())
                     ).toList()
 
             );
