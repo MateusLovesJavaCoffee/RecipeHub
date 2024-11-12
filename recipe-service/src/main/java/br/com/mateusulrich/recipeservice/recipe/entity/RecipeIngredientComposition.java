@@ -1,4 +1,4 @@
-package br.com.mateusulrich.recipeservice.recipe.jpa;
+package br.com.mateusulrich.recipeservice.recipe.entity;
 
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
 import br.com.mateusulrich.recipeservice.ingredient.entities.IngredientUnit;

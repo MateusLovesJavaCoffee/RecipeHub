@@ -1,4 +1,4 @@
-package br.com.mateusulrich.recipeservice.recipe.jpa;
+package br.com.mateusulrich.recipeservice.recipe.entity;
 
 import lombok.*;
 
@@ -10,16 +10,16 @@ import java.util.Objects;
 @Entity
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
-@Table(name = "recipe_steps")
-public class RecipeStep {
+@Table(name = "instructions")
+public class Instruction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
-    @Column(name = "step_number", nullable = false)
-    private Integer stepNumber;
+    @Column(name = "number", nullable = false)
+    private Integer number;
 
     @Column(name = "step_description", columnDefinition = "TEXT", nullable = false)
     private String description;
@@ -31,7 +31,7 @@ public class RecipeStep {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RecipeStep that = (RecipeStep) o;
+        Instruction that = (Instruction) o;
         return Objects.equals(getId(), that.getId());
     }
 

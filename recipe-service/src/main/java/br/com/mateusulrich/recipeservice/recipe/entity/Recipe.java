@@ -1,4 +1,4 @@
-package br.com.mateusulrich.recipeservice.recipe.jpa;
+package br.com.mateusulrich.recipeservice.recipe.entity;
 
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
 import br.com.mateusulrich.recipeservice.ingredient.entities.IngredientUnit;
@@ -74,7 +74,7 @@ public class Recipe {
     private Set<RecipeIngredientComposition> ingredientCompositions = new HashSet<>();
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<RecipeStep> recipeSteps = new HashSet<>();
+    private Set<Instruction> instructions = new HashSet<>();
 
     public Recipe(String title, String description, int preparationMinutes, Integer cookingMinutes, int servings, Difficulty difficulty, int estimatedCost) {
         this.title = title;
@@ -113,12 +113,12 @@ public class Recipe {
         }
     }
 
-    public void addRecipeStep(RecipeStep step) {
-        recipeSteps.add(step);
+    public void addRecipeStep(Instruction step) {
+        instructions.add(step);
         step.setRecipe(this);
     }
-    public void removeRecipeStep(RecipeStep step) {
-        recipeSteps.remove(step);
+    public void removeRecipeStep(Instruction step) {
+        instructions.remove(step);
         step.setRecipe(null);
     }
     public void addIngredientComposition(Ingredient ingredient, int amount, int order, String description, IngredientUnit unitOfMeasure) {

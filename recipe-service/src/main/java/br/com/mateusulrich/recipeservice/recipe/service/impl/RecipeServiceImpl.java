@@ -6,7 +6,7 @@ import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
 import br.com.mateusulrich.recipeservice.recipe.dto.input.RecipeInputData;
 import br.com.mateusulrich.recipeservice.recipe.dto.RecipeResponse;
 import br.com.mateusulrich.recipeservice.recipe.dto.retrieve.GetRecipeResponse;
-import br.com.mateusulrich.recipeservice.recipe.jpa.Recipe;
+import br.com.mateusulrich.recipeservice.recipe.entity.Recipe;
 import br.com.mateusulrich.recipeservice.recipe.mapper.RecipeMapper;
 import br.com.mateusulrich.recipeservice.recipe.repositories.RecipeRepository;
 import br.com.mateusulrich.recipeservice.recipe.service.RecipeService;

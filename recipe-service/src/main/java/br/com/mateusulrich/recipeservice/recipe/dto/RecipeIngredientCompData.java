@@ -3,7 +3,7 @@ package br.com.mateusulrich.recipeservice.recipe.dto;
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
 import br.com.mateusulrich.recipeservice.ingredient.entities.IngredientUnit;
 import br.com.mateusulrich.recipeservice.ingredient.enums.IngredientCategory;
-import br.com.mateusulrich.recipeservice.recipe.jpa.RecipeIngredientComposition;
+import br.com.mateusulrich.recipeservice.recipe.entity.RecipeIngredientComposition;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Value;
 

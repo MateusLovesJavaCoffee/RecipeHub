@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-public record RecipeStepInput(
+public record RecipeInstructionInput(
         @NotNull @Min(1) @Max(99)
         Integer stepNumber,
 

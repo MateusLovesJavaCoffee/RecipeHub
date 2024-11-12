@@ -1,4 +1,4 @@
-package br.com.mateusulrich.recipeservice.recipe.jpa;
+package br.com.mateusulrich.recipeservice.recipe.entity;
 
 import lombok.Getter;
 
