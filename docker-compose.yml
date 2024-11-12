@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: recipe_hub_container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 949807
+      POSTGRES_DB: recipe_hub_db
+      POSTGRES_INIT DB_ARGS: "--encoding=UTF8 --locale=pt_BR.UTF-8"  # Argumentos extras para inicializar o banco com UTF-8
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - "5433:5432"
+    networks:
+      - recipe_hub_networks
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    restart: unless-stopped  # Garante que o container reinicie automaticamente em caso de falha
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]  # Verifica se o PostgreSQL está pronto para aceitar conexões
+      interval: 30s
+      retries: 3
+      start_period: 10s
+
+networks:
+  recipe_hub_networks:  # Corrigido o nome da rede
+    driver: bridge  # Definindo o driver da rede como bridge (padrão)

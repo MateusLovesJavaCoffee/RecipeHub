@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Set;
 
-public record IngredientDto(
+public record IngredientInputData(
 
         @NotBlank
         @Length(min = 1, max = 100)

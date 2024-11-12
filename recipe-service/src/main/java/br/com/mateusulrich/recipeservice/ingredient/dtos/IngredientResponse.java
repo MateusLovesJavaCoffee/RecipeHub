@@ -1,5 +1,6 @@
 package br.com.mateusulrich.recipeservice.ingredient.dtos;
 
+import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
 import br.com.mateusulrich.recipeservice.ingredient.enums.IngredientCategory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -16,4 +17,15 @@ public record IngredientResponse(
         IngredientCategory category
 
 ) {
+
+        public static IngredientResponse from(Ingredient ingredient){
+                return new IngredientResponse(
+                        ingredient.getId(),
+                        ingredient.getImageUrl(),
+                        ingredient.getName(),
+                        ingredient.getShortDescription(),
+                        ingredient.getCategory()
+                );
+
+        }
 }

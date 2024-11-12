@@ -1,14 +1,13 @@
-package br.com.mateusulrich.recipeservice.ingredient.service.impl;
+package br.com.mateusulrich.recipeservice.ingredient.service;
 
 import br.com.mateusulrich.recipeservice.common.exception.*;
-import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientDto;
+import br.com.mateusulrich.recipeservice.common.specifications.SpecificationTemplate;
+import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientInputData;
 import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
 import br.com.mateusulrich.recipeservice.ingredient.entities.IngredientUnit;
-import br.com.mateusulrich.recipeservice.ingredient.mapper.IngredientMapper;
 import br.com.mateusulrich.recipeservice.ingredient.repository.IngredientRepository;
 import br.com.mateusulrich.recipeservice.ingredient.repository.IngredientUnitRepository;
-import br.com.mateusulrich.recipeservice.ingredient.service.IngredientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,6 +22,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static br.com.mateusulrich.recipeservice.common.specifications.SpecificationTemplate.*;
+
 @Service
 @Log4j2
 @RequiredArgsConstructor
@@ -30,52 +31,47 @@ public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientUnitRepository unitRepo;
     private final IngredientRepository ingredientRepository;
-    private final IngredientMapper ingredientMapper;
 
     @Override
     @Transactional(readOnly = true)
-    public IngredientResponse findByIdOrThrowNotFound(Long id) {
+    public IngredientResponse findIngredientById(Long id) {
         final Ingredient ingredient = ingredientRepository.findById(id).orElseThrow(() -> NotFoundException.with(Ingredient.class, id));
-        return ingredientMapper.toIngredientResponse(ingredient);
+        return IngredientResponse.from(ingredient);
     }
 
     @Override
     @Transactional
-    public IngredientResponse createIngredient(IngredientDto data) {
+    public IngredientResponse createIngredient(IngredientInputData data) {
+        assertNameDoesNotExist(data.name());
         Set<Long> unitIds = data.possibleUnits();
         Set<IngredientUnit> ingredientUnits = unitRepo.findAllByIdIn(unitIds);
         assertExistsIds(ingredientUnits, unitIds);
-        assertNameDoesNotExist(data.name());
-        Ingredient ingredient = ingredientMapper.fromCreationDataToEntity(data);
-        ingredient.setPossibleUnits(ingredientUnits);
+        Ingredient ingredient = new Ingredient(data.name(), data.shortDescription(), data.category(), ingredientUnits);
         ingredientRepository.save(ingredient);
-
-        return ingredientMapper.toIngredientResponse(ingredient);
+        return IngredientResponse.from(ingredient);
     }
 
     @Override
     @Transactional
-    public IngredientResponse updateIngredient(Long id, IngredientDto data) {
+    public void updateIngredient(Long id, IngredientInputData data) {
         Ingredient ingredient = ingredientRepository.findIngredientWithUnits(id)
                 .orElseThrow(() -> NotFoundException.with(Ingredient.class, id));
 
-        Set<Long> unitIds = data.possibleUnits();
-        Set<IngredientUnit> ingredientUnits = unitRepo.findAllByIdIn(unitIds);
-
-        assertExistsIds(ingredientUnits, unitIds);
+        Set<IngredientUnit> ingredientUnits = unitRepo.findAllByIdIn(data.possibleUnits());
 
         if (!Objects.equals(data.name(), ingredient.getName())) {
             assertNameDoesNotExist(data.name());
         }
+        assertExistsIds(ingredientUnits, data.possibleUnits());
 
-        ingredientMapper.update(ingredient, data);
-
+        ingredient.setName(data.name());
+        ingredient.setShortDescription(data.shortDescription());
+        ingredient.setCategory(data.category());
         ingredient.getPossibleUnits().clear();
         for (IngredientUnit unit : ingredientUnits) {
             ingredient.addPossibleUnit(unit);
         }
         ingredientRepository.save(ingredient);
-        return ingredientMapper.toIngredientResponse(ingredient);
     }
 
     @Override
@@ -94,8 +90,9 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<IngredientResponse> listAllIngredients(Pageable pageable) {
-        return ingredientRepository.findAll(pageable).map(ingredientMapper::toIngredientResponse);
+    public Page<IngredientResponse> listAllIngredients(
+            IngredientSpec spec, Pageable pageable) {
+        return ingredientRepository.findAll(spec, pageable).map(IngredientResponse::from);
     }
 
     private void assertNameDoesNotExist(String name) {
@@ -104,11 +101,12 @@ public class IngredientServiceImpl implements IngredientService {
         }
     }
     private void assertExistsIds(Set<IngredientUnit> entities, Set<Long> unitIds) {
-       for(IngredientUnit entity : entities) {
-           unitIds.remove(entity.getId());
-       }
-        if (!unitIds.isEmpty()) {
-            String msg = unitIds.stream().map(Objects::toString).collect(Collectors.joining(", "));
+        Set<Long> mutableUnitIds = new HashSet<>(unitIds);
+        for (IngredientUnit entity : entities) {
+            mutableUnitIds.remove(entity.getId());
+        }
+        if (!mutableUnitIds.isEmpty()) {
+            String msg = mutableUnitIds.stream().map(Objects::toString).collect(Collectors.joining(", "));
             throw new MissingIdentifiersException("Some IngredientUnits could not be found: %s".formatted(msg));
         }
     }

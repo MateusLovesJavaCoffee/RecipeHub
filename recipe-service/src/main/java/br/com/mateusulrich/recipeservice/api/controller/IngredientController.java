@@ -1,7 +1,8 @@
 package br.com.mateusulrich.recipeservice.api.controller;
 
 import br.com.mateusulrich.recipeservice.api.openapi.IngredientOpenApi;
-import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientDto;
+import br.com.mateusulrich.recipeservice.common.specifications.SpecificationTemplate;
+import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientInputData;
 import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
 import br.com.mateusulrich.recipeservice.ingredient.service.IngredientService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class IngredientController implements IngredientOpenApi {
             produces = APPLICATION_JSON_VALUE,
             consumes = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<IngredientResponse> addIngredient(@Valid @RequestBody IngredientDto data) {
+    public ResponseEntity<IngredientResponse> addIngredient(@Valid @RequestBody IngredientInputData data) {
         log.debug("POST createIngredient data received {} ", data.toString());
         final IngredientResponse response = ingredientService.createIngredient(data);
 
@@ -43,7 +44,7 @@ public class IngredientController implements IngredientOpenApi {
 
     @Override
     @PutMapping(value = "/{id}")
-    public ResponseEntity<IngredientResponse> updateIngredient(@PathVariable(name = "id") Long id, @RequestBody @Valid IngredientDto data) {
+    public ResponseEntity<IngredientResponse> updateIngredient(@PathVariable(name = "id") Long id, @RequestBody @Valid IngredientInputData data) {
         ingredientService.updateIngredient(id, data);
         return ResponseEntity.noContent().build();
     }
@@ -70,13 +71,15 @@ public class IngredientController implements IngredientOpenApi {
     @Override
     @GetMapping(value = "/{ingredientId}")
     public ResponseEntity<IngredientResponse> findIngredientById(@PathVariable Long ingredientId) {
-        final IngredientResponse response = ingredientService.findByIdOrThrowNotFound(ingredientId);
+        final IngredientResponse response = ingredientService.findIngredientById(ingredientId);
         return ResponseEntity.ok(response);
     }
 
-    @Override
     @GetMapping
-    public ResponseEntity<Page<IngredientResponse>> listAllIngredients(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(ingredientService.listAllIngredients(pageable));
+    @Override
+    public ResponseEntity<Page<IngredientResponse>> listAllIngredients(
+            SpecificationTemplate.IngredientSpec spec,
+            @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.ok(ingredientService.listAllIngredients(spec, pageable));
     }
 }

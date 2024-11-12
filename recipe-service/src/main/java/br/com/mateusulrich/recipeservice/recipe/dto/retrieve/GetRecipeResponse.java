@@ -2,7 +2,6 @@ package br.com.mateusulrich.recipeservice.recipe.dto.retrieve;
 
 import br.com.mateusulrich.recipeservice.recipe.dto.RecipeIngredientCompData;
 import br.com.mateusulrich.recipeservice.recipe.dto.create.CreateRecipeStepData;
-import br.com.mateusulrich.recipeservice.recipe.dto.create.RecipeIngredientsDto;
 import br.com.mateusulrich.recipeservice.recipe.enums.Difficulty;
 import com.fasterxml.jackson.annotation.JsonInclude;
 

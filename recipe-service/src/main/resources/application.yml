@@ -13,12 +13,14 @@ server:
       io: 4 # One IO thread per CPU core is a reasonable default: https://undertow.io/undertow-docs/undertow-docs-2.1.0/index.html#listeners-2
 
 spring:
+  profiles:
+    active: default
   flyway:
     enabled: true
   application:
     name: recipe-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/my-recipe-hub
+    url: jdbc:postgresql://localhost:5433/recipe_hub_db
     username: postgres
     password: 949807
     hikari:

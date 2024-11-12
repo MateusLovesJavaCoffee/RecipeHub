@@ -1,17 +1,20 @@
 package br.com.mateusulrich.recipeservice.ingredient.service;
 
 
-import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientDto;
+import br.com.mateusulrich.recipeservice.common.specifications.SpecificationTemplate;
+import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientInputData;
 import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import static br.com.mateusulrich.recipeservice.common.specifications.SpecificationTemplate.*;
+
 public interface IngredientService {
 
-    IngredientResponse findByIdOrThrowNotFound(Long id);
-    IngredientResponse createIngredient(IngredientDto data);
-    IngredientResponse updateIngredient(Long id, IngredientDto data);
-//    void updateIngredientImage(Long id, CreateMediaData createMediaData);
+    IngredientResponse findIngredientById(Long id);
+    IngredientResponse createIngredient(IngredientInputData data);
+    void updateIngredient(Long id, IngredientInputData data);
     void deleteIngredient(Long ingredientId);
-    Page<IngredientResponse> listAllIngredients(Pageable pageable);
+    Page<IngredientResponse> listAllIngredients(IngredientSpec spec, Pageable pageable);
+
 }

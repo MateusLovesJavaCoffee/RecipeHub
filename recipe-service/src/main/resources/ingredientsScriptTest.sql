@@ -1,6 +1,6 @@
 
 
--- Inserir dados na tabela ingredient_units
+--tabela ingredient_units
 INSERT INTO ingredient_units (id, unit_name) VALUES (1, 'Grams');
 INSERT INTO ingredient_units (id, unit_name) VALUES (2, 'Kilograms');
 INSERT INTO ingredient_units (id, unit_name) VALUES (3, 'Liters');

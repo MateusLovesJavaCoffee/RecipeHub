@@ -60,11 +60,27 @@ public class Ingredient {
         this.category = category;
     }
 
+    public Ingredient(String name, String shortDescription, IngredientCategory category, Set<IngredientUnit> possibleUnits) {
+        this.name = name;
+        this.shortDescription = shortDescription;
+        this.category = category;
+        this.possibleUnits = possibleUnits;
+    }
+
+    public Ingredient(Ingredient ingredient) {
+        this.id = ingredient.getId();
+        this.name = ingredient.getName();
+        this.imageUrl = ingredient.getImageUrl();
+        this.shortDescription = ingredient.getShortDescription();
+        this.category = ingredient.getCategory();
+        this.possibleUnits = ingredient.getPossibleUnits();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IngredientUnit that = (IngredientUnit) o;
+        Ingredient that = (Ingredient) o;
         return Objects.equals(getId(), that.getId());
     }
 

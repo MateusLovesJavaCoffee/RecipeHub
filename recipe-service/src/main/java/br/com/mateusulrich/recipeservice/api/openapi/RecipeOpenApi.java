@@ -4,7 +4,6 @@ import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
 import br.com.mateusulrich.recipeservice.recipe.dto.input.RecipeInputData;
 import br.com.mateusulrich.recipeservice.recipe.dto.RecipeResponse;
 import br.com.mateusulrich.recipeservice.recipe.dto.retrieve.GetRecipeResponse;
-import br.com.mateusulrich.recipeservice.recipe.dto.update.UpdateRecipeData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,9 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-;
 
 @Tag(name = "Recipe", description = "A API de Receitas permite a criação, consulta, atualização e exclusão de ingredientes utilizados em receitas.")
 public interface RecipeOpenApi {

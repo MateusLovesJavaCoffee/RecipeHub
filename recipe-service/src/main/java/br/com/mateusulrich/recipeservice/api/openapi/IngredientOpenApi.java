@@ -1,6 +1,7 @@
 package br.com.mateusulrich.recipeservice.api.openapi;
 
-import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientDto;
+import br.com.mateusulrich.recipeservice.common.specifications.SpecificationTemplate;
+import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientInputData;
 import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +29,7 @@ public interface IngredientOpenApi {
             @ApiResponse(responseCode = "422", description = "Erro de validação"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    ResponseEntity<IngredientResponse> addIngredient(IngredientDto request);
+    ResponseEntity<IngredientResponse> addIngredient(IngredientInputData request);
 
     @Operation(
             summary = "Update an existing Ingredient by its identifier",
@@ -39,7 +42,7 @@ public interface IngredientOpenApi {
             @ApiResponse(responseCode = "422", description = "Erro de validação"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    ResponseEntity<IngredientResponse> updateIngredient(Long id, IngredientDto request);
+    ResponseEntity<IngredientResponse> updateIngredient(Long id, IngredientInputData request);
 
 //    @Operation(
 //            summary = "Update the photo of an Ingredient by its identifier",
@@ -95,6 +98,8 @@ public interface IngredientOpenApi {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     ResponseEntity<Page<IngredientResponse>> listAllIngredients(
+            SpecificationTemplate.IngredientSpec spec,
             @Parameter(hidden = true)Pageable pageable
     );
+
 }
