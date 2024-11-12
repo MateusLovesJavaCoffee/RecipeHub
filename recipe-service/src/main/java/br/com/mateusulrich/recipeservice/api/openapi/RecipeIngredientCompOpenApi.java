@@ -38,7 +38,9 @@ public interface RecipeIngredientCompOpenApi {
             @ApiResponse(responseCode = "422", description = "Erro de validação"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    ResponseEntity<Void> updateIngredientIntoRecipe(IngredientCompositionInput input);
+    ResponseEntity<Void> updateIngredientIntoRecipe(
+            Long recipeId,
+            IngredientCompositionInput input);
 
     @Operation(
             summary = "Deleta um Ingrediente na Receita pelo seu ID.")

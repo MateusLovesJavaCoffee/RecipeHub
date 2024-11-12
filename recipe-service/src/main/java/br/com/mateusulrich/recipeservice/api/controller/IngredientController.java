@@ -22,7 +22,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(value = "/ingredients")
 @RequiredArgsConstructor
-@Log4j2
 public class IngredientController implements IngredientOpenApi {
 
     private final IngredientService ingredientService;
@@ -33,12 +32,7 @@ public class IngredientController implements IngredientOpenApi {
             consumes = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<IngredientResponse> addIngredient(@Valid @RequestBody IngredientInputData data) {
-        log.debug("POST createIngredient data received {} ", data.toString());
         final IngredientResponse response = ingredientService.createIngredient(data);
-
-        log.info("Ingredient saved successfully ingredientId {} ", response.id());
-
-
         return ResponseEntity.created(URI.create("/ingredients/" + response.id())).body(response);
     }
 

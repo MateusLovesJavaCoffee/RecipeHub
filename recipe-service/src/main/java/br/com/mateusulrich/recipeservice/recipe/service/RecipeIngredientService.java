@@ -4,6 +4,6 @@ import br.com.mateusulrich.recipeservice.recipe.dto.create.IngredientComposition
 public interface RecipeIngredientService {
 
     void save(Long recipeId, IngredientCompositionInput data);
-    void update(Long id, IngredientCompositionInput data);
+    void update(Long recipeId, IngredientCompositionInput data);
     void delete(Long id);
 }

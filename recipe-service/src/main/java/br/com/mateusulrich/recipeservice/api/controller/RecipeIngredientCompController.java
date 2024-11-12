@@ -24,9 +24,14 @@ public class RecipeIngredientCompController implements RecipeIngredientCompOpenA
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping(value = "/{ingredientId}")
     @Override
-    public ResponseEntity<Void> updateIngredientIntoRecipe(IngredientCompositionInput input) {
-        return null;
+    public ResponseEntity<Void> updateIngredientIntoRecipe(
+            @PathVariable Long recipeId,
+            @RequestBody @Valid IngredientCompositionInput input) {
+
+        service.update(recipeId, input);
+        return ResponseEntity.noContent().build();
     }
 
     @Override

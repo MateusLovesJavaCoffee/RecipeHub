@@ -1,7 +1,5 @@
 package br.com.mateusulrich.recipeservice.recipe.dto.create;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 

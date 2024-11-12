@@ -9,6 +9,4 @@ public interface RecipeService {
     RecipeResponse save(RecipeInputData recipeInputData);
     RecipeResponse update(Long id, RecipeInputData createRecipeData);
     void delete(Long id);
-
-
 }
