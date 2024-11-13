@@ -6,10 +6,10 @@ import br.com.mateusulrich.recipeservice.common.exception.MissingIdentifiersExce
 import br.com.mateusulrich.recipeservice.common.exception.NotFoundException;
 import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientInputData;
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
-import br.com.mateusulrich.recipeservice.ingredient.entities.IngredientUnit;
+import br.com.mateusulrich.recipeservice.ingredient.entities.UnitOfMeasure;
 import br.com.mateusulrich.recipeservice.ingredient.enums.IngredientCategory;
 import br.com.mateusulrich.recipeservice.ingredient.repository.IngredientRepository;
-import br.com.mateusulrich.recipeservice.ingredient.repository.IngredientUnitRepository;
+import br.com.mateusulrich.recipeservice.ingredient.repository.UnitOfMeasureRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -30,7 +30,7 @@ class UpdateIngredientTest extends ServiceUnitTests {
     private IngredientServiceImpl ingredientService;
 
     @Mock
-    private IngredientUnitRepository unitRepo;
+    private UnitOfMeasureRepository unitRepo;
 
     @Mock
     private IngredientRepository ingredientRepository;
@@ -42,20 +42,20 @@ class UpdateIngredientTest extends ServiceUnitTests {
 
     @Test
     void givenAValidInput_whenCallsUpdateIngredient_thenSuccess() {
-        final var expectId = 10L;
+        final var expectId = 10;
         final Ingredient toUpdate = new Ingredient("Tomateee", "Tomateee", IngredientCategory.BAKING, new HashSet<>());
         toUpdate.setId(expectId);
 
         final String expectName = "Tomato";
-        final Set<IngredientUnit> expectUnits = Set.of(new IngredientUnit(1L, "teste1"), new IngredientUnit(2L, "teste2"), new IngredientUnit(3L, "teste3"));
+        final Set<UnitOfMeasure> expectUnits = Set.of(new UnitOfMeasure(1, "teste1"), new UnitOfMeasure(2, "teste2"), new UnitOfMeasure(3, "teste3"));
         final String expectDescription = "Tomato";
         final String expectImgUrl = null;
         final IngredientCategory expectCategory = IngredientCategory.VEGETABLES;
-        final Set<Long> units =  new HashSet<>(Set.of(1L, 2L));
+        final Set<Integer> units =  new HashSet<>(Set.of(1, 2));
 
         final IngredientInputData input = new IngredientInputData(expectName, expectDescription, expectCategory, units);
 
-        when(ingredientRepository.findIngredientWithUnits(10L))
+        when(ingredientRepository.findIngredientWithUnits(10))
                 .thenReturn(Optional.of(toUpdate));
 
         when(ingredientRepository.existsByName(expectName)).thenReturn(false);
@@ -65,7 +65,7 @@ class UpdateIngredientTest extends ServiceUnitTests {
 
         Mockito.verify(ingredientRepository, times(1)).save(argThat(ingredient ->
                 Objects.equals(expectName, ingredient.getName())
-                        && Objects.equals(expectDescription, ingredient.getShortDescription())
+                        && Objects.equals(expectDescription, ingredient.getDescription())
                         && Objects.equals(expectImgUrl, ingredient.getImageUrl())
                         && Objects.equals(expectCategory, ingredient.getCategory())
                         && Objects.equals(expectUnits, ingredient.getPossibleUnits())
@@ -77,21 +77,21 @@ class UpdateIngredientTest extends ServiceUnitTests {
     }
     @Test
     void givenSameName_whenCallsUpdateIngredient_thenAssertNameDoesNotExistIsSkipped() {
-        final var expectId = 10L;
+        final var expectId = 10;
         final String sameName = "Tomato";
 
         final Ingredient toUpdate = new Ingredient(sameName, "Tomateee", IngredientCategory.BAKING, new HashSet<>());
         toUpdate.setId(expectId);
 
-        final Set<IngredientUnit> expectUnits = Set.of(new IngredientUnit(1L, "teste1"), new IngredientUnit(2L, "teste2"), new IngredientUnit(3L, "teste3"));
+        final Set<UnitOfMeasure> expectUnits = Set.of(new UnitOfMeasure(1, "teste1"), new UnitOfMeasure(2, "teste2"), new UnitOfMeasure(3, "teste3"));
         final String expectDescription = "Tomato";
         final String expectImgUrl = null;
         final IngredientCategory expectCategory = IngredientCategory.VEGETABLES;
-        final Set<Long> units =  new HashSet<>(Set.of(1L, 2L));
+        final Set<Integer> units =  new HashSet<>(Set.of(1, 2));
 
         final IngredientInputData input = new IngredientInputData(sameName, expectDescription, expectCategory, units);
 
-        when(ingredientRepository.findIngredientWithUnits(10L))
+        when(ingredientRepository.findIngredientWithUnits(10))
                 .thenReturn(Optional.of(toUpdate));
 
         when(unitRepo.findAllByIdIn(units)).thenReturn(expectUnits);
@@ -100,7 +100,7 @@ class UpdateIngredientTest extends ServiceUnitTests {
 
         Mockito.verify(ingredientRepository, times(1)).save(argThat(ingredient ->
                 Objects.equals(sameName, ingredient.getName())
-                        && Objects.equals(expectDescription, ingredient.getShortDescription())
+                        && Objects.equals(expectDescription, ingredient.getDescription())
                         && Objects.equals(expectImgUrl, ingredient.getImageUrl())
                         && Objects.equals(expectCategory, ingredient.getCategory())
                         && Objects.equals(expectUnits, ingredient.getPossibleUnits())
@@ -115,21 +115,21 @@ class UpdateIngredientTest extends ServiceUnitTests {
 
      @Test
      void givenANonUniqueName_whenCallsUpdateIngredient_thenReturnException() {
-         final var expectId = 10L;
+         final var expectId = 10;
          final Ingredient toUpdate = new Ingredient("Tomateee", "Tomateee", IngredientCategory.BAKING, new HashSet<>());
          toUpdate.setId(expectId);
 
          final String nonUniqueName = "Tomato";
-         final Set<IngredientUnit> expectUnits = Set.of(new IngredientUnit(1L, "teste1"), new IngredientUnit(2L, "teste2"), new IngredientUnit(3L, "teste3"));
+         final Set<UnitOfMeasure> expectUnits = Set.of(new UnitOfMeasure(1, "teste1"), new UnitOfMeasure(2, "teste2"), new UnitOfMeasure(3, "teste3"));
          final String expectDescription = "Tomato";
          final IngredientCategory expectCategory = IngredientCategory.VEGETABLES;
-         final Set<Long> units =  new HashSet<>(Set.of(1L, 2L));
+         final Set<Integer> units =  new HashSet<>(Set.of(1, 2));
 
          final String expectErrorMsg = "Ingredient name must be unique.";
 
          final IngredientInputData input = new IngredientInputData(nonUniqueName, expectDescription, expectCategory, units);
 
-         when(ingredientRepository.findIngredientWithUnits(10L))
+         when(ingredientRepository.findIngredientWithUnits(10))
                  .thenReturn(Optional.of(toUpdate));
 
          when(ingredientRepository.existsByName(nonUniqueName)).thenReturn(true);
@@ -149,20 +149,20 @@ class UpdateIngredientTest extends ServiceUnitTests {
 
      @Test
      void givenANonExistingIngredientUnitIDs_whenCallsUpdateIngredient_shouldReturnException() {
-         final var expectId = 10L;
+         final var expectId = 10;
          final Ingredient toUpdate = new Ingredient("Tomateee", "Tomateee", IngredientCategory.BAKING, new HashSet<>());
          toUpdate.setId(expectId);
 
          final String expectName = "Tomato";
         final String expectDescription = "Tomato";
          final IngredientCategory expectCategory = IngredientCategory.VEGETABLES;
-         final Set<Long> nonExistingIds =  new HashSet<>(Set.of(1L, 2L));
+         final Set<Integer> nonExistingIds =  new HashSet<>(Set.of(1, 2));
 
          final String expectErrorMsg = "Some IngredientUnits could not be found: 1, 2";
 
          final IngredientInputData input = new IngredientInputData(expectName, expectDescription, expectCategory, nonExistingIds);
 
-         when(ingredientRepository.findIngredientWithUnits(10L))
+         when(ingredientRepository.findIngredientWithUnits(10))
                  .thenReturn(Optional.of(toUpdate));
          when(unitRepo.findAllByIdIn(nonExistingIds)).thenReturn(Set.of());
          when(ingredientRepository.existsByName(expectName)).thenReturn(false);
@@ -182,12 +182,12 @@ class UpdateIngredientTest extends ServiceUnitTests {
      }
      @Test
      void givenANonExistingIngredientID_whenCallsUpdateIngredient_shouldReturnException() {
-         final var nonExistingId = 10L;
+         final var nonExistingId = 10;
 
          final String expectName = "Tomato";
          final String expectDescription = "Tomato";
          final IngredientCategory expectCategory = IngredientCategory.VEGETABLES;
-         final Set<Long> units =  new HashSet<>(Set.of(1L, 2L));
+         final Set<Integer> units =  new HashSet<>(Set.of(1, 2));
 
          final String expectErrorMsg = "Ingredient with ID: 10 was not found.";
 

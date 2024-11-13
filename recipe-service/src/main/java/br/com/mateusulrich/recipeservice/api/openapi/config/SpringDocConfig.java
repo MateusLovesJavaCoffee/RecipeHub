@@ -11,15 +11,13 @@ public class SpringDocConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-
         return new OpenAPI()
                 .info(new Info()
-                        .title("Recipe App API ")
+                        .title("Recipe App API")
                         .version("v1")
                         .description("Rest API for Recipe App")
                         .license(new License()
                                 .name("Apache 2.0")
-                                .url("urltest.com")));
-
+                                .url("https://www.apache.org/licenses/LICENSE-2.0")));
     }
 }

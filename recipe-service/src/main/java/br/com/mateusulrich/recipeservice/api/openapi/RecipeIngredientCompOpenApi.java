@@ -2,6 +2,8 @@ package br.com.mateusulrich.recipeservice.api.openapi;
 
 import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
 import br.com.mateusulrich.recipeservice.recipe.dto.input.IngredientCompositionInput;
+import br.com.mateusulrich.recipeservice.recipe.dto.input.UpdateIngredientCompositionInput;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,7 +27,7 @@ public interface RecipeIngredientCompOpenApi {
             @ApiResponse(responseCode = "422", description = "Erro de validação"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    ResponseEntity<Void> addIngredientIntoRecipe(Long recipeId, IngredientCompositionInput input);
+    ResponseEntity<Void> addIngredientIntoRecipe(Integer recipeId, IngredientCompositionInput input);
 
     @Operation(
             summary = "Atualizar um Ingrediente na Receita")
@@ -39,8 +41,9 @@ public interface RecipeIngredientCompOpenApi {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     ResponseEntity<Void> updateIngredientIntoRecipe(
-            Long recipeId,
-            IngredientCompositionInput input);
+            Integer recipeId,
+            Integer ingredientId,
+            UpdateIngredientCompositionInput input);
 
     @Operation(
             summary = "Deleta um Ingrediente na Receita pelo seu ID.")
@@ -50,7 +53,7 @@ public interface RecipeIngredientCompOpenApi {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     ResponseEntity<Void> deleteIngredientIntoRecipe(
-            @Parameter(description = "ID da Receita", required = true) Long recipeId,
-            @Parameter(description = "ID do Ingrediente", required = true) Long ingredientId
+            @Parameter(description = "ID da Receita", required = true) Integer recipeId,
+            @Parameter(description = "ID do Ingrediente", required = true) Integer ingredientId
     );
 }

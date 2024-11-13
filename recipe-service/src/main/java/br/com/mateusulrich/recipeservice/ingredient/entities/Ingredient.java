@@ -18,18 +18,18 @@ public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long id;
+    private Integer id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 50)
     private String name;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", length = 250)
     private String imageUrl;
 
-    @Column(name = "short_description", length = 250)
-    private String shortDescription;
+    @Column(length = 200)
+    private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private IngredientCategory category;
 
@@ -40,29 +40,29 @@ public class Ingredient {
     @JoinTable(
             name = "possible_units",
             joinColumns = @JoinColumn(name = "ingredient_id"),
-            inverseJoinColumns = @JoinColumn(name = "ingredient_unit_id")
+            inverseJoinColumns = @JoinColumn(name = "unit_of_measure_id")
     )
-    private Set<IngredientUnit> possibleUnits;
+    private Set<UnitOfMeasure> possibleUnits;
 
-    public Set<IngredientUnit> getPossibleUnits() {
+    public Set<UnitOfMeasure> getPossibleUnits() {
         return possibleUnits != null ? possibleUnits : new HashSet<>();
     }
-    public void addPossibleUnit(final IngredientUnit unit) {
+    public void addPossibleUnit(final UnitOfMeasure unit) {
         if (possibleUnits != null) {
             this.possibleUnits.add(unit);
         }
 
     }
 
-    public Ingredient(String name, String shortDescription, IngredientCategory category) {
+    public Ingredient(String name, String description, IngredientCategory category) {
         this.name = name;
-        this.shortDescription = shortDescription;
+        this.description = description;
         this.category = category;
     }
 
-    public Ingredient(String name, String shortDescription, IngredientCategory category, Set<IngredientUnit> possibleUnits) {
+    public Ingredient(String name, String description, IngredientCategory category, Set<UnitOfMeasure> possibleUnits) {
         this.name = name;
-        this.shortDescription = shortDescription;
+        this.description = description;
         this.category = category;
         this.possibleUnits = possibleUnits;
     }
@@ -71,7 +71,7 @@ public class Ingredient {
         this.id = ingredient.getId();
         this.name = ingredient.getName();
         this.imageUrl = ingredient.getImageUrl();
-        this.shortDescription = ingredient.getShortDescription();
+        this.description = ingredient.getDescription();
         this.category = ingredient.getCategory();
         this.possibleUnits = ingredient.getPossibleUnits();
     }

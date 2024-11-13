@@ -18,7 +18,7 @@ public class IngredientFactory {
     }
     public static IngredientResponse newIngredientResponse() {
         return new IngredientResponse(
-                1L,
+                1,
                 null,
                 "Ingredient Name Test",
                 "Ingredient Description Test",
@@ -30,7 +30,7 @@ public class IngredientFactory {
                 "Tomato",
                 "Fresh tomato",
                 IngredientCategory.VEGETABLES,
-                Set.of(1L, 2L)
+                Set.of(1, 2)
         );
     }
 }

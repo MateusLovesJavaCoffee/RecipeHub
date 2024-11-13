@@ -2,6 +2,7 @@ package br.com.mateusulrich.recipeservice.recipe.entity;
 
 import lombok.Getter;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -10,19 +11,18 @@ import java.util.Objects;
 @Getter
 public class RecipeIngredientsID implements Serializable {
 
-    private Long ingredientId;
-    private Long recipeId;
+    @Column(name = "ingredient_id")
+    private Integer ingredientId;
+    @Column(name = "recipe_id")
+    private Integer recipeId;
 
-    public RecipeIngredientsID(final Long ingredientId, final Long recipeId) {
+    public RecipeIngredientsID(final Integer ingredientId, final Integer recipeId) {
         this.ingredientId = ingredientId;
         this.recipeId = recipeId;
     }
-
-
     public RecipeIngredientsID() {
 
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,36 +1,38 @@
 package br.com.mateusulrich.recipeservice.recipe.entity;
 
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
-import br.com.mateusulrich.recipeservice.ingredient.entities.IngredientUnit;
+import br.com.mateusulrich.recipeservice.ingredient.entities.UnitOfMeasure;
 import br.com.mateusulrich.recipeservice.recipe.enums.Difficulty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "recipes")
-//@NaturalIdCache
-//@org.hibernate.annotations.Cache(
-//        usage = CacheConcurrencyStrategy.READ_WRITE
-//)
+@BatchSize(size = 20)
 public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long id;
+    private Integer id;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(length = 250)
+    @Column(name = "img_url", length = 250)
     private String imgUrl;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -49,7 +51,7 @@ public class Recipe {
     private int servings;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private Difficulty difficulty;
 
     @Column(name = "estimated_cost", nullable = false)
@@ -58,6 +60,7 @@ public class Recipe {
     @Column(name = "likes", nullable = false)
     private int likes = 0;
 
+    @Setter
     @Column(name = "active", nullable = false)
     private Boolean active;
 
@@ -70,8 +73,9 @@ public class Recipe {
     @Column(name = "deleted_at")
     private Instant deletedAt;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<RecipeIngredientComposition> ingredientCompositions = new HashSet<>();
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 20)
+    private Set<IngredientComposition> ingredientCompositions = new HashSet<>();
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Instruction> instructions = new HashSet<>();
@@ -84,56 +88,47 @@ public class Recipe {
         this.servings = servings;
         this.difficulty = difficulty;
         this.estimatedCost = estimatedCost;
+        this.setActive(false);
+        this.deletedAt = Instant.now();
     }
 
-    @PrePersist
+    @PrePersist @PreUpdate
     void onPersist() {
         this.setReadyInMinutes(this.cookingMinutes + this.preparationMinutes);
-        if (active == null || !active.equals(Boolean.TRUE)) {
-            active = false;
-            publishedAt = null;
-            updatedAt = null;
-            deletedAt = Instant.now();
-        }
     }
 
-    @PreUpdate
-    void onUpdate() {
-        this.setReadyInMinutes(this.cookingMinutes + this.preparationMinutes);
-        if (active.equals(Boolean.FALSE)) {
-            active = false;
-            updatedAt = Instant.now();
-            deletedAt = Instant.now();
-        }
-        if (active.equals(Boolean.TRUE)) {
-            active = true;
-            updatedAt = Instant.now();
-            publishedAt = Instant.now();
-            deletedAt = null;
-        }
+    public void addInstruction(Instruction instruction) {
+        instructions.add(instruction);
+        instruction.setRecipe(this);
     }
-
-    public void addRecipeStep(Instruction step) {
-        instructions.add(step);
-        step.setRecipe(this);
+    public void removeRecipeStep(Instruction instruction) {
+        instructions.remove(instruction);
+        instruction.setRecipe(null);
     }
-    public void removeRecipeStep(Instruction step) {
-        instructions.remove(step);
-        step.setRecipe(null);
-    }
-    public void addIngredientComposition(Ingredient ingredient, int amount, int order, String description, IngredientUnit unitOfMeasure) {
-        this.ingredientCompositions.add(new RecipeIngredientComposition(this, ingredient, amount, order, description, unitOfMeasure));
+    public void addIngredientComposition(Ingredient ingredient, int amount, int order, String description, UnitOfMeasure unitOfMeasure) {
+        this.ingredientCompositions.add(new IngredientComposition(this, ingredient, amount, order, description, unitOfMeasure));
     }
     public void removeIngredientComposition(Ingredient ingredient) {
-        for (Iterator<RecipeIngredientComposition> iterator = ingredientCompositions.iterator();
+        for (Iterator<IngredientComposition> iterator = ingredientCompositions.iterator();
              iterator.hasNext(); ) {
-            RecipeIngredientComposition ingComp = iterator.next();
+            IngredientComposition ingComp = iterator.next();
             if (ingComp.getRecipe().equals(this) && ingComp.getIngredient().equals(ingredient)) {
                 iterator.remove();
                 ingComp.setRecipe(null);
                 ingComp.setIngredient(null);
             }
         }
+    }
+    public void changeStatus(Boolean status) {
+        if (Boolean.TRUE.equals(status) && this.getPublishedAt() == null) {
+            this.publishedAt = Instant.now();
+        }
+        if (Boolean.FALSE.equals(status)) {
+            this.updatedAt = Instant.now();
+            this.deletedAt = Instant.now();
+            this.setActive(false);
+        }
+        this.setActive(status);
     }
 
     public Recipe setEstimatedCost(int estimatedCost) {

@@ -4,7 +4,7 @@ import br.com.mateusulrich.recipeservice.ServiceUnitTests;
 import br.com.mateusulrich.recipeservice.common.exception.EntityInUseException;
 import br.com.mateusulrich.recipeservice.common.exception.NotFoundException;
 import br.com.mateusulrich.recipeservice.ingredient.repository.IngredientRepository;
-import br.com.mateusulrich.recipeservice.ingredient.repository.IngredientUnitRepository;
+import br.com.mateusulrich.recipeservice.ingredient.repository.UnitOfMeasureRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,7 +24,7 @@ class DeleteIngredientTest extends ServiceUnitTests {
     private IngredientServiceImpl ingredientService;
 
     @Mock
-    private IngredientUnitRepository unitRepo;
+    private UnitOfMeasureRepository unitRepo;
 
     @Mock
     private IngredientRepository ingredientRepository;
@@ -36,7 +36,7 @@ class DeleteIngredientTest extends ServiceUnitTests {
 
     @Test
     void deleteShouldDoNothing_whenIngredientIdExists() {
-    Long existingId = 1L;
+        Integer existingId = 1;
     when(ingredientRepository.existsById(existingId)).thenReturn(true);
     doNothing().when(ingredientRepository).deleteById(existingId);
     Assertions.assertDoesNotThrow(() -> {
@@ -48,7 +48,7 @@ class DeleteIngredientTest extends ServiceUnitTests {
     }
     @Test
     void deleteShouldThrowNotFoundException_whenIdDoesNotExist() {
-        Long nonExistingId = 2L;
+        Integer nonExistingId = 2;
         String expectedErrorMsg = "Ingredient with ID: 2 was not found.";
 
         when(ingredientRepository.existsById(nonExistingId)).thenReturn(false);
@@ -66,7 +66,7 @@ class DeleteIngredientTest extends ServiceUnitTests {
 
     @Test
     void deleteShouldThrowEntityInUseException_whenDataIntegrityViolationOccurs() {
-        Long id = 1L;
+        Integer id = 1;
         when(ingredientRepository.existsById(id)).thenReturn(true);
         doThrow(DataIntegrityViolationException.class).when(ingredientRepository).deleteById(id);
         EntityInUseException exception = assertThrows(EntityInUseException.class, () -> {

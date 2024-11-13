@@ -3,30 +3,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.13</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>br.com.mateusulrich</groupId>
+        <artifactId>RecipeHub</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>br.com.mateusulrich</groupId>
+
     <artifactId>recipe-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>recipe-service</name>
-    <description>recipe-service</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
-
+    <description>RecipeHub API Service</description>
 
     <properties>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -90,27 +75,19 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
         </dependency>
-        <!-- Dependência do Springdoc OpenAPI para Web MVC Core -->
+        <!-- Dependência para o Springdoc OpenAPI Core -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-webmvc-core</artifactId>
             <version>1.6.14</version>
         </dependency>
 
-        <!-- Dependência do Springdoc OpenAPI UI -->
+        <!-- Dependência para o Springdoc OpenAPI UI -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.6.14</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/net.kaczmarzyk/specification-arg-resolver -->
-        <dependency>
-            <groupId>net.kaczmarzyk</groupId>
-            <artifactId>specification-arg-resolver</artifactId>
-            <version>2.6.2</version>
-        </dependency>
-
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -162,7 +139,7 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>8.5.13</version>
+                <version>8.5.13</version> <!-- Use a versão apropriada -->
                 <executions>
                     <execution>
                         <goals>
@@ -170,9 +147,33 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <url>jdbc:h2:mem:testdb</url>
+                    <user>sa</user>
+                    <password>password</password>
+                    <locations>
+                        <location>classpath:db/migration</location>
+                    </locations>
+                </configuration>
             </plugin>
 
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>postgresql</id>
+            <properties>
+                <spring.profiles.active>postgresql</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>h2</id>
+            <properties>
+                <spring.profiles.active>h2</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
+
 
 </project>

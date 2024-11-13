@@ -11,8 +11,7 @@ import java.io.Serializable;
 
 public record RecipeInstructionInput(
         @NotNull @Min(1) @Max(99)
-        Integer stepNumber,
-
+        Integer instructionNumber,
         @NotBlank
         @Length(min = 1, max = 250)
         String description

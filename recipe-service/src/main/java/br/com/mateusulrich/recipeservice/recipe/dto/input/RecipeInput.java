@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 
-public record RecipeInputData(
+public record RecipeInput(
 
         @NotBlank
         @Length(min = 1, max = 100)

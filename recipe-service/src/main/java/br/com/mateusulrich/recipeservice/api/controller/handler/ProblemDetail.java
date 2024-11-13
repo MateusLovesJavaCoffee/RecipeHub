@@ -1,5 +1,6 @@
 package br.com.mateusulrich.recipeservice.api.controller.handler;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import java.util.List;
 public class ProblemDetail {
 
     @Schema(example = "2024-11-09T12:36:00Z", description = "Timestamp of when the error occurred")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
     private Instant occurredAt;
 
     @Schema(example = "Invalid data", description = "A short title or summary of the error")

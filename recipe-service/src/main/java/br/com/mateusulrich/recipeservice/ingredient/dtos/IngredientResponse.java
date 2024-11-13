@@ -2,18 +2,15 @@ package br.com.mateusulrich.recipeservice.ingredient.dtos;
 
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
 import br.com.mateusulrich.recipeservice.ingredient.enums.IngredientCategory;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record IngredientResponse(
-        Long id,
-        @JsonProperty(value = "image_url")
+        Integer id,
         String imageUrl,
         String name,
-        @JsonProperty(value = "short_description")
-        String shortDescription,
+        String description,
         IngredientCategory category
 
 ) {
@@ -23,7 +20,7 @@ public record IngredientResponse(
                         ingredient.getId(),
                         ingredient.getImageUrl(),
                         ingredient.getName(),
-                        ingredient.getShortDescription(),
+                        ingredient.getDescription(),
                         ingredient.getCategory()
                 );
 

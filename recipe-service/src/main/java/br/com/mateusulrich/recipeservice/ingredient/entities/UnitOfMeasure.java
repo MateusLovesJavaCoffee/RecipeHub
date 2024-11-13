@@ -8,25 +8,25 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Getter
-@Entity(name = "IngredientUnit")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "ingredient_units")
-public class IngredientUnit {
+@Table(name = "unit_of_measure")
+public class UnitOfMeasure {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long id;
+    private Integer id;
 
-    @Column(name = "unit_name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IngredientUnit that = (IngredientUnit) o;
+        UnitOfMeasure that = (UnitOfMeasure) o;
         return Objects.equals(getId(), that.getId());
     }
 

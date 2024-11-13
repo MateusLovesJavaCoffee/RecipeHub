@@ -1,7 +1,7 @@
 package br.com.mateusulrich.recipeservice.recipe.entity;
 
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
-import br.com.mateusulrich.recipeservice.ingredient.entities.IngredientUnit;
+import br.com.mateusulrich.recipeservice.ingredient.entities.UnitOfMeasure;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,8 +12,8 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
-@Table(name = "recipe_ingredient_composition")
-public class RecipeIngredientComposition {
+@Table(name = "ingredient_composition")
+public class IngredientComposition {
 
     @EmbeddedId
     private RecipeIngredientsID id;
@@ -22,7 +22,7 @@ public class RecipeIngredientComposition {
     @MapsId("recipeId")
     private Recipe recipe;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("ingredientId")
     private Ingredient ingredient;
 
@@ -32,14 +32,14 @@ public class RecipeIngredientComposition {
     @Column(name = "order_number", nullable = false)
     private int order;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 50)
     private String description;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "unit_of_measure")
-    private IngredientUnit unitOfMeasure;
+    @JoinColumn(name = "unit_of_measure_id")
+    private UnitOfMeasure unitOfMeasure;
 
-    public RecipeIngredientComposition(Recipe recipe, Ingredient ingredient, Integer amount, int order, String description, IngredientUnit unitOfMeasure) {
+    public IngredientComposition(Recipe recipe, Ingredient ingredient, Integer amount, int order, String description, UnitOfMeasure unitOfMeasure) {
         this.id = new RecipeIngredientsID(ingredient.getId(), recipe.getId());
         this.recipe = recipe;
         this.ingredient = ingredient;
@@ -55,7 +55,7 @@ public class RecipeIngredientComposition {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RecipeIngredientComposition that = (RecipeIngredientComposition) o;
+        IngredientComposition that = (IngredientComposition) o;
         return Objects.equals(getId(), that.getId());
     }
 

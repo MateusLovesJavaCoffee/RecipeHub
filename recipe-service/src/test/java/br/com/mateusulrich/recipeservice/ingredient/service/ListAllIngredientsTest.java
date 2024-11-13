@@ -6,7 +6,7 @@ import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
 import br.com.mateusulrich.recipeservice.ingredient.enums.IngredientCategory;
 import br.com.mateusulrich.recipeservice.ingredient.repository.IngredientRepository;
-import br.com.mateusulrich.recipeservice.ingredient.repository.IngredientUnitRepository;
+import br.com.mateusulrich.recipeservice.ingredient.repository.UnitOfMeasureRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,19 +15,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
-import static br.com.mateusulrich.recipeservice.common.specifications.SpecificationTemplate.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class ListAllIngredientsTest extends ServiceUnitTests {
+class ListAllIngredientsTest extends ServiceUnitTests {
     @InjectMocks
     private IngredientServiceImpl ingredientService;
 
     @Mock
-    private IngredientUnitRepository unitRepo;
+    private UnitOfMeasureRepository unitRepo;
 
     @Mock
     private IngredientRepository ingredientRepository;
@@ -38,20 +38,20 @@ public class ListAllIngredientsTest extends ServiceUnitTests {
     }
 
     private Pageable pageable;
-    private IngredientSpec spec;
 
     @BeforeEach
     void setUp() {
         pageable = PageRequest.of(0, 10);
-        spec = mock(IngredientSpec.class);
+
     }
 
     @Test
     void givenValidSpecAndPageable_whenListAllIngredients_thenReturnsPageOfIngredients() {
         Ingredient ingredient1 = new Ingredient("Tomato", "Tomato Description", IngredientCategory.VEGETABLES);
-        ingredient1.setId(1L);
+        ingredient1.setId(1);
         Ingredient ingredient2 = new Ingredient("Carrot", "Carrot Description", IngredientCategory.VEGETABLES);
-        ingredient2.setId(2L);
+        ingredient2.setId(2);
+        Specification<Ingredient> spec = SpecificationTemplate.hasCategoryAndName(null, null);
 
         Page<Ingredient> ingredientsPage = new PageImpl<>(List.of(ingredient1, ingredient2), pageable, 2);
 
@@ -68,6 +68,8 @@ public class ListAllIngredientsTest extends ServiceUnitTests {
 
     @Test
     void givenEmptyPage_whenListAllIngredients_thenReturnsEmptyPage() {
+        Specification<Ingredient> spec = SpecificationTemplate.hasCategoryAndName(null, null);
+
         Page<Ingredient> emptyPage = Page.empty(pageable);
         when(ingredientRepository.findAll(spec, pageable)).thenReturn(emptyPage);
         Page<IngredientResponse> result = ingredientService.listAllIngredients(spec, pageable);

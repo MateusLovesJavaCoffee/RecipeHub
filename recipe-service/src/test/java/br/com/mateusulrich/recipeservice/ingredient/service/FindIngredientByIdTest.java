@@ -3,10 +3,10 @@ package br.com.mateusulrich.recipeservice.ingredient.service;
 import br.com.mateusulrich.recipeservice.ServiceUnitTests;
 import br.com.mateusulrich.recipeservice.common.exception.NotFoundException;
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
-import br.com.mateusulrich.recipeservice.ingredient.entities.IngredientUnit;
+import br.com.mateusulrich.recipeservice.ingredient.entities.UnitOfMeasure;
 import br.com.mateusulrich.recipeservice.ingredient.enums.IngredientCategory;
 import br.com.mateusulrich.recipeservice.ingredient.repository.IngredientRepository;
-import br.com.mateusulrich.recipeservice.ingredient.repository.IngredientUnitRepository;
+import br.com.mateusulrich.recipeservice.ingredient.repository.UnitOfMeasureRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,7 +26,7 @@ class FindIngredientByIdTest extends ServiceUnitTests {
     private IngredientServiceImpl ingredientService;
 
     @Mock
-    private IngredientUnitRepository unitRepo;
+    private UnitOfMeasureRepository unitRepo;
 
     @Mock
     private IngredientRepository ingredientRepository;
@@ -38,9 +38,9 @@ class FindIngredientByIdTest extends ServiceUnitTests {
 
     @Test
     void givenAValidID_whenCallsFindIngredientById_thenReturnIngredientResponse() {
-        final Long expectId = 10L;
+        final Integer expectId = 10;
         final String expectName = "Tomato";
-        final Set<IngredientUnit> expectUnits = Set.of(new IngredientUnit(1L, "teste1"), new IngredientUnit(2L, "teste2"), new IngredientUnit(3L, "teste3"));
+        final Set<UnitOfMeasure> expectUnits = Set.of(new UnitOfMeasure(1, "teste1"), new UnitOfMeasure(2, "teste2"), new UnitOfMeasure(3, "teste3"));
         final String expectDescription = "Tomato";
         final String expectImgUrl = "https://via.placeholder.com/150";
         final IngredientCategory expectCategory = IngredientCategory.VEGETABLES;
@@ -55,7 +55,7 @@ class FindIngredientByIdTest extends ServiceUnitTests {
 
         Assertions.assertEquals(expectId, output.id());
         Assertions.assertEquals(expectName, output.name());
-        Assertions.assertEquals(expectDescription, output.shortDescription());
+        Assertions.assertEquals(expectDescription, output.description());
         Assertions.assertEquals(expectImgUrl, output.imageUrl());
         Assertions.assertEquals(expectCategory, output.category());
 
@@ -66,7 +66,7 @@ class FindIngredientByIdTest extends ServiceUnitTests {
     void givenAValidId_whenCallsFindIngredientByIdAndDoesNotNotExist_thenReturnReturnNotFoundException() {
         final var expectedErrorMessage = "Ingredient with ID: 10 was not found.";
 
-        final var expectedId = 10L;
+        final var expectedId = 10;
 
         when(ingredientRepository.findById(expectedId))
                 .thenReturn(Optional.empty());

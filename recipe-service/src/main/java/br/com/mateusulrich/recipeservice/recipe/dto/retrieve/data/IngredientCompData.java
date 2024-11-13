@@ -1,20 +1,20 @@
-package br.com.mateusulrich.recipeservice.recipe.dto;
+package br.com.mateusulrich.recipeservice.recipe.dto.retrieve.data;
 
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
-import br.com.mateusulrich.recipeservice.ingredient.entities.IngredientUnit;
+import br.com.mateusulrich.recipeservice.ingredient.entities.UnitOfMeasure;
 import br.com.mateusulrich.recipeservice.ingredient.enums.IngredientCategory;
-import br.com.mateusulrich.recipeservice.recipe.entity.RecipeIngredientComposition;
+import br.com.mateusulrich.recipeservice.recipe.entity.IngredientComposition;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Value;
 
 import java.io.Serializable;
 
 /**
- * DTO for {@link RecipeIngredientComposition}
+ * DTO for {@link IngredientComposition}
  */
 @Value
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RecipeIngredientCompData implements Serializable {
+public class IngredientCompData implements Serializable {
     IngredientDto ingredient;
     Integer amount;
     int order;
@@ -26,7 +26,7 @@ public class RecipeIngredientCompData implements Serializable {
      */
     @Value
     public static class IngredientDto implements Serializable {
-        Long id;
+        Integer id;
         String name;
         String imageUrl;
         String shortDescription;
@@ -34,22 +34,22 @@ public class RecipeIngredientCompData implements Serializable {
     }
 
     /**
-     * DTO for {@link IngredientUnit}
+     * DTO for {@link UnitOfMeasure}
      */
     @Value
     public static class IngredientUnitDto implements Serializable {
-        Long id;
+        Integer id;
         String name;
     }
 
-    public RecipeIngredientCompData(RecipeIngredientComposition composition) {
+    public IngredientCompData(IngredientComposition composition) {
         Ingredient ing = composition.getIngredient();
-        IngredientUnit uof = composition.getUnitOfMeasure();
+        UnitOfMeasure uof = composition.getUnitOfMeasure();
         this.ingredient = new IngredientDto(
                 ing.getId(),
                 ing.getName(),
                 ing.getImageUrl(),
-                ing.getShortDescription(),
+                ing.getDescription(),
                 ing.getCategory()
         );
         this.amount = composition.getAmount();

@@ -1,6 +1,8 @@
 package br.com.mateusulrich.recipeservice.recipe.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -8,35 +10,42 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Table(name = "instructions")
 public class Instruction {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long id;
+    @EmbeddedId
+    private InstructionID instructionID;
 
-    @Column(name = "number", nullable = false)
-    private Integer number;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("recipeId")
+    private Recipe recipe;
 
-    @Column(name = "step_description", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "description", nullable = false, length = 500)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Recipe recipe;
+    public Instruction(Recipe recipe, Integer instructionNumber, String description) {
+        this.instructionID = new InstructionID(instructionNumber, recipe.getId());
+        this.recipe = recipe;
+        this.description = description;
+    }
+
+    public Instruction(InstructionID instructionID, Recipe recipe, Integer instructionNumber, String description) {
+        this.instructionID = instructionID;
+        this.recipe = recipe;
+        this.description = description;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Instruction that = (Instruction) o;
-        return Objects.equals(getId(), that.getId());
+        return Objects.equals(getInstructionID(), that.getInstructionID());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return Objects.hashCode(getInstructionID());
     }
 }

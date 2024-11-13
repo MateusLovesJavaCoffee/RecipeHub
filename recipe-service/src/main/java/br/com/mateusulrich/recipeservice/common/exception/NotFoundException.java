@@ -6,7 +6,7 @@ public class NotFoundException extends DomainException {
         super(message, null);
     }
 
-    public static NotFoundException with(final Class<?> entityClass, final Long identifier) {
+    public static NotFoundException with(final Class<?> entityClass, final Integer identifier) {
         return new NotFoundException("%s with ID: %s was not found.".formatted(entityClass.getSimpleName(), identifier.toString()));
     }
 }

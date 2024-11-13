@@ -1,14 +1,29 @@
 version: '3.8'
 
 services:
+  app:
+    container_name: recipe-hub-container
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    depends_on:
+      - postgres
+    networks:
+      - recipe_hub_networks
+
   postgres:
     image: postgres:14
-    container_name: recipe_hub_container
+    container_name: recipe-hub-postgres-container
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 949807
-      POSTGRES_DB: recipe_hub_db
-      POSTGRES_INIT DB_ARGS: "--encoding=UTF8 --locale=pt_BR.UTF-8"  # Argumentos extras para inicializar o banco com UTF-8
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_INIT DB_ARGS: "--encoding=UTF8 --locale=pt_BR.UTF-8"
     security_opt:
       - seccomp:unconfined
     ports:
@@ -17,13 +32,7 @@ services:
       - recipe_hub_networks
     volumes:
       - ./data:/var/lib/postgresql/data
-    restart: unless-stopped  # Garante que o container reinicie automaticamente em caso de falha
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]  # Verifica se o PostgreSQL está pronto para aceitar conexões
-      interval: 30s
-      retries: 3
-      start_period: 10s
+    restart: unless-stopped
 
 networks:
-  recipe_hub_networks:  # Corrigido o nome da rede
-    driver: bridge  # Definindo o driver da rede como bridge (padrão)
+  recipe_hub_networks:

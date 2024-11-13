@@ -1,7 +1,6 @@
 package br.com.mateusulrich.recipeservice.ingredient.dtos;
 
 import br.com.mateusulrich.recipeservice.ingredient.enums.IngredientCategory;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
@@ -18,16 +17,14 @@ public record IngredientInputData(
         String name,
 
         @Length(min = 0, max = 250)
-        @JsonProperty(value = "short_description")
-        String shortDescription,
+        String description,
 
         @NotNull
         IngredientCategory category,
 
         @NotEmpty
         @Size(min = 1, max = 21)
-        @JsonProperty(value = "possible_units")
-        Set<Long> possibleUnits
+        Set<Integer> possibleUnits
 
 ) implements Serializable {
 

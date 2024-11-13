@@ -96,15 +96,15 @@ public class GlobalExceptionHandle {
             return ResponseEntity.status(status).body(problem);
         }
 
-        @ExceptionHandler(Exception.class)
-        public ResponseEntity<ProblemDetail> handleUncaught(Exception ex, HttpServletRequest request) {
-            HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-            String title = "Internal Server Error";
-            String detail = "An unexpected error occurred on the server. Please try again later. If the problem persists, contact the system administrator.";
-            ProblemDetail problem = new ProblemDetail(title, status, detail, request.getRequestURI());
-
-            return ResponseEntity.status(status).body(problem);
-        }
+//        @ExceptionHandler(Exception.class)
+//        public ResponseEntity<ProblemDetail> handleUncaught(Exception ex, HttpServletRequest request) {
+//            HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+//            String title = "Internal Server Error";
+//            String detail = "An unexpected error occurred on the server. Please try again later. If the problem persists, contact the system administrator.";
+//            ProblemDetail problem = new ProblemDetail(title, status, detail, request.getRequestURI());
+//
+//            return ResponseEntity.status(status).body(problem);
+//        }
 
         @ExceptionHandler(NoHandlerFoundException.class)
         public ResponseEntity<ProblemDetail> noHandlerFoundException (NoHandlerFoundException ex, HttpServletRequest request) {

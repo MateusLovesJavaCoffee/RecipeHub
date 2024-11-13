@@ -1,1 +1,0 @@
-ALTER TABLE recipe_steps RENAME COLUMN step_order TO step_number;

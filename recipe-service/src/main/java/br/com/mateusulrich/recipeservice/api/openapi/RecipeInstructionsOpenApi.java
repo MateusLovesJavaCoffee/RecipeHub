@@ -2,7 +2,7 @@ package br.com.mateusulrich.recipeservice.api.openapi;
 
 import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
 import br.com.mateusulrich.recipeservice.recipe.dto.input.RecipeInstructionInput;
-import br.com.mateusulrich.recipeservice.recipe.entity.Instruction;
+import br.com.mateusulrich.recipeservice.recipe.dto.retrieve.InstructionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,7 +22,7 @@ public interface RecipeInstructionsOpenApi {
             @ApiResponse(responseCode = "422", description = "Erro de validação"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    ResponseEntity<Instruction> createInstructionIntoRecipe(Long recipeId, RecipeInstructionInput input);
+    ResponseEntity<InstructionResponse> createInstructionIntoRecipe(Integer recipeId, RecipeInstructionInput input);
 
     @Operation(
             summary = "Atualizar uma Instrução na Receita")
@@ -34,7 +34,7 @@ public interface RecipeInstructionsOpenApi {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     ResponseEntity<Void> updateInstructionIntoRecipe(
-            Long recipeId,
+            Integer recipeId,
             RecipeInstructionInput input);
 
     @Operation(summary = "Deleta uma Instrução na Receita pelo seu ID.")
@@ -44,6 +44,7 @@ public interface RecipeInstructionsOpenApi {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     ResponseEntity<Void> deleteInstructionIntoRecipe(
-            @Parameter(description = "ID da Receita", required = true) Long instructionId
+            @Parameter(description = "ID da Receita", required = true) Integer recipeId,
+            @Parameter(description = "ID da Instrução", required = true) Integer instructionId
     );
 }
