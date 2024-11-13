@@ -3,8 +3,8 @@ version: '3.8'
 services:
   app:
     container_name: recipe-hub-container
-#    build: .
-    image: soapbody/recipe-service:latest
+    build: .
+#    image: soapbody/recipe-service:latest
     restart: unless-stopped
     env_file:
       - .env
@@ -21,9 +21,9 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
-      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
       POSTGRES_INIT_DB_ARGS: "--encoding=UTF8 --locale=pt_BR.UTF-8"
     ports:
       - "5433:5432"

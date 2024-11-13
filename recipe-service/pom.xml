@@ -14,6 +14,11 @@
     <description>RecipeHub API Service</description>
 
     <properties>
+        <db.host>${env.DB_HOST_NAME}</db.host>
+        <db.port>${env.DB_PORT}</db.port>
+        <db.name>${env.DB_NAME}</db.name>
+        <db.username>${env.DB_USERNAME}</db.username>
+        <db.password>${env.DB_PASSWORD}</db.password>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <java.version>17</java.version>
@@ -59,6 +64,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <version>42.5.4</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -95,11 +101,12 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Dependência do H2 para banco de dados em memória -->
+        <!-- Dependência do H2 Database -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>runtime</scope> <!-- Define que é para testes -->
+            <version>2.1.210</version> <!-- Versão recomendada -->
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -148,9 +155,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <url>jdbc:h2:mem:testdb</url>
-                    <user>sa</user>
-                    <password>password</password>
+                    <url>jdbc:postgresql://${db.host}:${db.port}/${db.name}</url>
+                    <user>${db.username}</user>
+                    <password>${db.password}</password>
                     <locations>
                         <location>classpath:db/migration</location>
                     </locations>
