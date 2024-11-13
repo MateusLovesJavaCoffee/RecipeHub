@@ -25,7 +25,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_INIT_DB_ARGS: "--encoding=UTF8 --locale=pt_BR.UTF-8"
     ports:
-      - "5433:5432"
+      - "5432:5432"
     networks:
       - recipe_hub_networks
     volumes:
