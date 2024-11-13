@@ -32,6 +32,12 @@ jobs:
       - name: Build with Maven (skip tests)
         run: mvn clean install -DskipTests
 
+      # Adicionando etapa para modificar docker-compose.yml
+      - name: Modify docker-compose.yml for CI/CD
+        run: |
+          sed -i 's/#    image: soapbody\/recipe-service:latest/image: soapbody\/recipe-service:latest/' docker-compose.yml
+          sed -i 's/  build: ./  # build: ./g' docker-compose.yml
+
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_HUB_NAME }}/recipe-service:latest .
 

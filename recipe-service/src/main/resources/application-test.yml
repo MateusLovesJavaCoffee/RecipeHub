@@ -6,13 +6,13 @@ spring:
     password: password
 
   flyway:
-    enabled: true
-    locations: classpath:db/migration/h2
+    enabled: false
+#    locations: classpath:db/migration/h2
     baseline-on-migrate: true
     out-of-order: true
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     properties:
       hibernate.dialect: org.hibernate.dialect.H2Dialect
   sql:
