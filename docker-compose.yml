@@ -8,7 +8,7 @@ services:
     env_file:
       - .env
     ports:
-      - "8080:8080"
+      - "80:8080"
     depends_on:
       - postgres
     networks:
@@ -24,8 +24,6 @@ services:
       POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_INIT_DB_ARGS: "--encoding=UTF8 --locale=pt_BR.UTF-8"
-    security_opt:
-      - seccomp:unconfined
     ports:
       - "5433:5432"
     networks:
@@ -35,4 +33,4 @@ services:
     restart: unless-stopped
 
 networks:
-  recipe_hub_networks:
+  recipe_hub_networks: {}
