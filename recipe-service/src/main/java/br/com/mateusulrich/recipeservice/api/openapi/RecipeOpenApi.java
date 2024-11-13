@@ -95,7 +95,7 @@ public interface RecipeOpenApi {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     ResponseEntity<PageResponse<ListRecipeResponse>> listRecipesByIngredients(
-            Set<Integer> ids,
+            @Parameter(description = "IDS dos Ingredientes") Set<Integer> ids,
             @Parameter(hidden = true) Pageable pageable
     );
 }
