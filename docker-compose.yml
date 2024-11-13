@@ -3,8 +3,8 @@ version: '3.8'
 services:
   app:
     container_name: recipe-hub-container
-    # build: .
-   image: soapbody/recipe-service:latest
+#    build: .
+    image: soapbody/recipe-service:latest
     restart: unless-stopped
     env_file:
       - .env
