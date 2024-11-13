@@ -20,7 +20,7 @@ spring:
   application:
     name: recipe-service
   datasource:
-    url: jdbc:postgresql://localhost:5433/recipe_hub_db
+    url: jdbc:postgresql://localhost:5432/recipe_hub_db
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
     hikari:
