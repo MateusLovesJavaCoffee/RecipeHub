@@ -37,7 +37,7 @@ public class RecipeController implements RecipeOpenApi {
     }
     @Override
     @PutMapping("/{recipeId}")
-    public ResponseEntity<RecipeResponse> updateRecipe(@PathVariable Integer recipeId, @RequestBody RecipeInput data) {
+    public ResponseEntity<RecipeResponse> updateRecipe(@PathVariable Integer recipeId, @RequestBody @Valid RecipeInput data) {
         RecipeResponse response = service.update(recipeId, data);
         return ResponseEntity.ok().body(response);
     }

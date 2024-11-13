@@ -5,7 +5,6 @@ import br.com.mateusulrich.recipeservice.ingredient.entities.UnitOfMeasure;
 import br.com.mateusulrich.recipeservice.recipe.enums.Difficulty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 
@@ -19,7 +18,6 @@ import java.util.Set;
 @Getter
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "recipes")
 @BatchSize(size = 20)
 public class Recipe {
@@ -48,21 +46,21 @@ public class Recipe {
     private Integer cookingMinutes;
 
     @Column(nullable = false)
-    private int servings;
+    private int servings = 0;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Difficulty difficulty;
 
     @Column(name = "estimated_cost", nullable = false)
-    private int estimatedCost;
+    private int estimatedCost = 0;
 
     @Column(name = "likes", nullable = false)
     private int likes = 0;
 
     @Setter
     @Column(name = "active", nullable = false)
-    private Boolean active;
+    private Boolean active = false;
 
     @Column(name = "published_at")
     private Instant publishedAt;
@@ -79,6 +77,11 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Instruction> instructions = new HashSet<>();
+
+    public Recipe() {
+        this.active = false;
+        this.deletedAt = Instant.now();
+    }
 
     public Recipe(String title, String description, int preparationMinutes, Integer cookingMinutes, int servings, Difficulty difficulty, int estimatedCost) {
         this.title = title;
@@ -122,13 +125,18 @@ public class Recipe {
     public void changeStatus(Boolean status) {
         if (Boolean.TRUE.equals(status) && this.getPublishedAt() == null) {
             this.publishedAt = Instant.now();
+            this.deletedAt = null;
+            return;
         }
         if (Boolean.FALSE.equals(status)) {
             this.updatedAt = Instant.now();
             this.deletedAt = Instant.now();
             this.setActive(false);
+            return;
         }
         this.setActive(status);
+        this.deletedAt = null;
+        this.updatedAt = Instant.now();
     }
 
     public Recipe setEstimatedCost(int estimatedCost) {

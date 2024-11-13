@@ -25,56 +25,141 @@ INSERT INTO ingredients (name, image_url, description, category) VALUES
 ('Cashews', 'https://example.com/images/cashews.jpg', 'A popular nut, often roasted and salted.', 'NUTS_AND_SEEDS');
 
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
+INSERT INTO unit_of_measure (name)
+VALUES ('Gram'),
+       ('Kilogram'),
+       ('Milliliter'),
+       ('Liter'),
+       ('Cup'),
+       ('Tablespoon'),
+       ('Teaspoon'),
+       ('Ounce'),
+       ('Pound'),
+       ('Inch'),
+       ('Centimeter'),
+       ('Meter'),
+       ('Foot'),
+       ('Liter (US)'),
+       ('Fluid Ounce'),
+       ('Quart'),
+       ('Pint'),
+       ('Pinch'),
+       ('Dash'),
+       ('Bunch');
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-    ((SELECT id FROM ingredients WHERE name = 'Eggs'), (SELECT id FROM unit_of_measure WHERE name = 'Pieces'));
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Milk'), 4),  -- Liter
+    ((SELECT id FROM ingredients WHERE name = 'Milk'), 3);  -- Milliliter
+
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Eggs'), 10), -- Unit
+    ((SELECT id FROM ingredients WHERE name = 'Eggs'), 1);  -- Gram
+
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Sugar'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Sugar'), 5);  -- Cup
+
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Flour'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Flour'), 5);  -- Cup
+
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Butter'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Butter'), 6);  -- Tablespoon
+
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Olive Oil'), 3),  -- Milliliter
+    ((SELECT id FROM ingredients WHERE name = 'Olive Oil'), 6);  -- Tablespoon
+
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Chicken Breast'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Chicken Breast'), 9);  -- Pound
+
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Beef Steak'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Beef Steak'), 8);  -- Ounce
 
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Sugar'), (SELECT id FROM unit_of_measure WHERE name = 'Grams')),
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Sugar'), (SELECT id FROM unit_of_measure WHERE name = 'Teaspoons'));
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Flour'), (SELECT id FROM unit_of_measure WHERE name = 'Grams')),
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Flour'), (SELECT id FROM unit_of_measure WHERE name = 'Cups'));
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Carrot'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Carrot'), 10);  -- Unit
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Butter'), (SELECT id FROM unit_of_measure WHERE name = 'Grams')),
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Butter'), (SELECT id FROM unit_of_measure WHERE name = 'Tablespoons'));
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Potato'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Potato'), 10);  -- Unit
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Olive Oil'), (SELECT id FROM unit_of_measure WHERE name = 'Tablespoons')),
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Olive Oil'), (SELECT id FROM unit_of_measure WHERE name = 'Milliliters'));
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Chicken Breast'), (SELECT id FROM unit_of_measure WHERE name = 'Grams')),
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Chicken Breast'), (SELECT id FROM unit_of_measure WHERE name = 'Pieces'));
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Tomato'), 10),  -- Unit
+    ((SELECT id FROM ingredients WHERE name = 'Tomato'), 1);  -- Gram
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Beef Steak'), (SELECT id FROM unit_of_measure WHERE name = 'Grams')),
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Beef Steak'), (SELECT id FROM unit_of_measure WHERE name = 'Pieces'));
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Apple'), 10),  -- Unit
+    ((SELECT id FROM ingredients WHERE name = 'Apple'), 1);  -- Gram
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-    ((SELECT id FROM ingredients WHERE name = 'Carrot'), (SELECT id FROM unit_of_measure WHERE name = 'Pieces'));
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Banana'), 10),  -- Unit
+    ((SELECT id FROM ingredients WHERE name = 'Banana'), 1);  -- Gram
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-    ((SELECT id FROM ingredients WHERE name = 'Potato'), (SELECT id FROM unit_of_measure WHERE name = 'Pieces'));
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Lettuce'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Lettuce'), 10);  -- Unit
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Tomato'), (SELECT id FROM unit_of_measure WHERE name = 'Pieces')),
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Tomato'), (SELECT id FROM unit_of_measure WHERE name = 'Grams'));
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-    ((SELECT id FROM ingredients WHERE name = 'Apple'), (SELECT id FROM unit_of_measure WHERE name = 'Pieces'));
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Cucumber'), 10),  -- Unit
+    ((SELECT id FROM ingredients WHERE name = 'Cucumber'), 1);  -- Gram
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-    ((SELECT id FROM ingredients WHERE name = 'Banana'), (SELECT id FROM unit_of_measure WHERE name = 'Pieces'));
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Salt'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Salt'), 7);  -- Teaspoon
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-    ((SELECT id FROM ingredients WHERE name = 'Lettuce'), (SELECT id FROM unit_of_measure WHERE name = 'Leaves'));
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Black Pepper'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Black Pepper'), 7);  -- Teaspoon
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-    ((SELECT id FROM ingredients WHERE name = 'Cucumber'), (SELECT id FROM unit_of_measure WHERE name = 'Pieces'));
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Basil'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Basil'), 6);  -- Tablespoon
 
-INSERT INTO possible_units (ingredient_id, unit_of_measure_id) VALUES
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Salt'), (SELECT id FROM unit_of_measure WHERE name = 'Teaspoons')),
-                                                                   ((SELECT id FROM ingredients WHERE name = 'Salt'), (SELECT id FROM unit_of_measure WHERE name = 'Pinches'));
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Garlic'), 11),  -- Clove
+    ((SELECT id FROM ingredients WHERE name = 'Garlic'), 1);  -- Gram
+
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Rice'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Rice'), 5);  -- Cup
+
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Pasta'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Pasta'), 5);  -- Cup
+
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Almonds'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Almonds'), 5);  -- Cup
+
+INSERT INTO possible_units (ingredient_id, unit_of_measure_id)
+VALUES
+    ((SELECT id FROM ingredients WHERE name = 'Cashews'), 1),  -- Gram
+    ((SELECT id FROM ingredients WHERE name = 'Cashews'), 5);  -- Cup
