@@ -9,8 +9,9 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")  // Permite os métodos HTTP comuns
                 .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowCredentials(false)
+                .maxAge(3600);
     }
 }
