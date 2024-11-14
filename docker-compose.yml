@@ -6,6 +6,8 @@ services:
     build: .
 #    image: soapbody/recipe-service:latest
     restart: unless-stopped
+    env_file:
+      - .env
     ports:
       - "8080:8080"
     depends_on:
@@ -16,6 +18,8 @@ services:
   postgres:
     image: postgres:14
     container_name: recipe-hub-postgres-container
+    env_file:
+      - .env
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
