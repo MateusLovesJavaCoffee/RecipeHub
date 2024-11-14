@@ -29,12 +29,16 @@ public class ListRecipeResponse {
         this.readyInMinutes = readyInMinutes;
         this.difficulty = difficulty;
         this.likes = likes;
-        this.ingredients = ingredients;
+        this.ingredients = ingredients != null ? ingredients : Set.of(); // Protege contra null
         this.ingredientCount = ingredientCount;
     }
 
-    public static ListRecipeResponse fromEntityToListResponse(Set<Integer> ingredients,Recipe recipe) {
+    public static ListRecipeResponse fromEntityToListResponse(Set<Integer> ingredients, Recipe recipe) {
         int count = 0;
+        Set<IngredientData> ingredientDataSet = (recipe.getIngredientCompositions() != null && !recipe.getIngredientCompositions().isEmpty())
+                ? recipe.getIngredientCompositions().stream().map(IngredientData::fromIngredient).collect(Collectors.toSet())
+                : Set.of();
+
         ListRecipeResponse response = new ListRecipeResponse(
                 recipe.getId(),
                 recipe.getTitle(),
@@ -42,17 +46,21 @@ public class ListRecipeResponse {
                 recipe.getReadyInMinutes(),
                 recipe.getDifficulty(),
                 recipe.getLikes(),
-                recipe.getIngredientCompositions().stream().map(IngredientData::fromIngredient).collect(Collectors.toSet()), 0);
-        for (IngredientData dto : response.getIngredients()) {
-            if (ingredients.contains(dto.getIngredientId())) {
-                count++;
+                ingredientDataSet,
+                0);
+        if (ingredients != null && !ingredients.isEmpty()) {
+            for (IngredientData dto : response.getIngredients()) {
+                if (ingredients.contains(dto.getIngredientId())) {
+                    count++;
+                }
+            }
+
+            if (count == ingredients.size()) {
+                response.setFullCompatible(true);
             }
         }
-        if (count == ingredients.size()) {
-            response.setFullCompatible(true);
-        }
+
         response.setIngredientCount(count);
         return response;
     }
-
 }

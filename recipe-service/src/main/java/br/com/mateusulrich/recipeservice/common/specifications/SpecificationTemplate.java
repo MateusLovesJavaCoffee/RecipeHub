@@ -26,6 +26,9 @@ public class SpecificationTemplate {
     }
     public static Specification<Recipe> hasIngredients(final Set<Integer> ingredientIds) {
         return (root, query, cb) -> {
+            if (ingredientIds == null || ingredientIds.isEmpty()) {
+                return cb.conjunction();
+            }
             query.distinct(true);
             Join<Recipe, IngredientComposition> ingredientCompositionJoin = root.join("ingredientCompositions", JoinType.INNER);
             Join<IngredientComposition, Ingredient> ingredientJoin = ingredientCompositionJoin.join("ingredient", JoinType.INNER);

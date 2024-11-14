@@ -18,10 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 
 @Service
@@ -54,12 +51,12 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional(readOnly = true)
     public PageResponse<ListRecipeResponse> findAllByIngredients(Set<Integer> ingredients, Specification<Recipe> spec, Pageable pageable) {
         Page<Recipe> recipes = recipeRepository.findAll(spec, pageable);
-        List<ListRecipeResponse> listRecipeResponses =
-                recipes.getContent().stream() .map(recipe -> ListRecipeResponse.fromEntityToListResponse(ingredients, recipe)).collect(Collectors.toList());
 
-        listRecipeResponses
-                .sort(Comparator.comparingInt(ListRecipeResponse::getIngredientCount)
-                        .reversed());
+        List<ListRecipeResponse> listRecipeResponses =
+                recipes.isEmpty() ? new ArrayList<>() :
+                        recipes.getContent().stream().map(recipe -> ListRecipeResponse
+                                .fromEntityToListResponse(Objects.isNull(ingredients) ? new HashSet<>() : ingredients, recipe)).sorted(Comparator.comparingInt(ListRecipeResponse::getIngredientCount)
+                                .reversed()).toList();
         return new PageResponse<>(
                 recipes.getNumber(),
                 recipes.getSize(),
