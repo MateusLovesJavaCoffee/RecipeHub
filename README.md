@@ -4,12 +4,17 @@
 Fui ao mercado e trouxe ovos, leite, farinha e carne. Gostaria de uma api onde eu soubesse de forma rápida e fácil o que posso fazer com os ingredientes que tenho.
 
 ## Tecnologias Utilizadas 
- - Backend: Java 17 framework Spring
- - Banco de Dados: PostgreSQL (hospedado no Railway)
+ **Backend:**
+ - Java 17 Framework Spring
+ - Spring Data Jpa e Hibernate(Persistência de Dados)
+ - Flyway (Para Scripts de migração do banco)
+ - Lombok (redução do codigo boilerplate)
+ - Banco de Dados: PostgreSQL (hospedado no Railway) e H2 (para os testes)
  - CI/CD: GitHub Actions
  - Deploy: Railway (deploy automático usando Docker)
  - Containerização: Docker (Imagem hospedada no DockerHub)
  - Swagger: Documentação interativa da API
+
 
 ## Diagrama de classes UML
 ![Untitled Diagram-Page-1 (4)](https://github.com/user-attachments/assets/a31a0513-7025-4a59-b945-9b9928a52daa)
