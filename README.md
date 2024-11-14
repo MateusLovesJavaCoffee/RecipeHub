@@ -19,3 +19,15 @@ Fui ao mercado e trouxe ovos, leite, farinha e carne. Gostaria de uma api onde e
 - Cadastro de Receitas: Permite criar receitas com a associação de ingredientes.
 - Edição de Ingredientes e Receitas: Permite editar ingredientes e receitas já cadastradas.
 - Listagem de Receitas: Exibe receitas que incluem os ingredientes fornecidos, com destaque para as receitas 100% compatíveis (que contêm todos os ingredientes informados).
+## Como Executar?
+
+Para rodar a API localmente, siga os passos abaixo:
+
+1. **Clone o repositório**:
+   ```bash
+   [git clone https://github.com/usuario/minha-api.git](https://github.com/MateusLovesJavaCoffee/RecipeHub.git)
+2. **Subir o banco de dados Postgresql**:
+   ```bash
+   docker-compose up -d
+3. **Iniciar a aplicação**
+   
