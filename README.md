@@ -21,6 +21,11 @@ Fui ao mercado e trouxe ovos, leite, farinha e carne. Gostaria de uma api onde e
 - Listagem de Receitas: Exibe receitas que incluem os ingredientes fornecidos, com destaque para as receitas 100% compatíveis (que contêm todos os ingredientes informados).
 ## Como Executar?
 
+### Ferramentas necessárias:  
+ - JDK 17
+ - Docker
+ - Ide de sua preferência.
+
 Para rodar a API localmente, siga os passos abaixo:
 
 1. **Clone o repositório**:
