@@ -2,7 +2,8 @@
 
 ## Problema:
 Fui ao mercado e trouxe ovos, leite, farinha e carne. Gostaria de uma api onde eu soubesse de forma rápida e fácil o que posso fazer com os ingredientes que tenho.
-
+   ### Documentação da api via Swagger disponivel online e acessivel via web:  
+       https://heroic-upliftment-production.up.railway.app/api/v1/swagger-ui/index.html
 ## Tecnologias Utilizadas 
  **Backend:**
  - Java 17 Framework Spring
