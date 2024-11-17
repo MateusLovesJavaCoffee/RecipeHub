@@ -1,22 +1,20 @@
 package br.com.mateusulrich.recipeservice.recipe.service;
 
+import br.com.mateusulrich.recipeservice.api.dtos.recipe.retrieve.list.RecipeIngredientMatchResponse;
 import br.com.mateusulrich.recipeservice.common.pagination.PageResponse;
-import br.com.mateusulrich.recipeservice.recipe.dto.input.RecipeInput;
-import br.com.mateusulrich.recipeservice.recipe.dto.retrieve.GetRecipeResponse;
-import br.com.mateusulrich.recipeservice.recipe.dto.retrieve.ListRecipeResponse;
-import br.com.mateusulrich.recipeservice.recipe.dto.retrieve.RecipeResponse;
 import br.com.mateusulrich.recipeservice.recipe.entity.Recipe;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Set;
 
 
 public interface RecipeService {
-    GetRecipeResponse getById(Integer id);
-    RecipeResponse create(RecipeInput recipeInput);
-    RecipeResponse update(Integer id, RecipeInput createRecipeData);
-    PageResponse<ListRecipeResponse> findAllByIngredients(Set<Integer> ingredients, Specification<Recipe> spec, Pageable pageable);
+    void updatePhoto(Recipe recipe, MultipartFile file) throws IOException;
+    Recipe findOrThrowNotFound(Integer id);
+    Recipe save(Recipe recipe);
+    PageResponse<RecipeIngredientMatchResponse> findAllByIngredientsMatchs(Set<Integer> ingredients, Pageable pageable);
     void delete(Integer id);
     void changeStatus(Integer id, Boolean status);
 }

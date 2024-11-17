@@ -1,5 +1,6 @@
 package br.com.mateusulrich.recipeservice.ingredient.entities;
 
+import br.com.mateusulrich.recipeservice.api.dtos.ingredient.IngredientRequest;
 import br.com.mateusulrich.recipeservice.ingredient.enums.IngredientCategory;
 import lombok.*;
 
@@ -36,24 +37,28 @@ public class Ingredient {
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
-    })
+    }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "possible_units",
             joinColumns = @JoinColumn(name = "ingredient_id"),
             inverseJoinColumns = @JoinColumn(name = "unit_of_measure_id")
     )
-    private Set<UnitOfMeasure> possibleUnits;
+    private Set<UnitOfMeasure> possibleUnits = new HashSet<>();
 
     public Set<UnitOfMeasure> getPossibleUnits() {
         return possibleUnits != null ? possibleUnits : new HashSet<>();
     }
     public void addPossibleUnit(final UnitOfMeasure unit) {
-        if (possibleUnits != null) {
+        if (unit != null) {
             this.possibleUnits.add(unit);
         }
 
     }
-
+    public void update(IngredientRequest inputData) {
+        this.name = inputData.name();
+        this.description = inputData.description();
+        this.category = inputData.category();
+    }
     public Ingredient(String name, String description, IngredientCategory category) {
         this.name = name;
         this.description = description;

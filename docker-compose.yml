@@ -1,10 +1,9 @@
-version: '3.8'
 
 services:
   app:
-    container_name: recipe-hub-container
+    container_name: recipe-hub-app-container
     build: .
-#    image: soapbody/recipe-service:latest
+    #    image: soapbody/recipe-service:latest
     restart: unless-stopped
     env_file:
       - .env
@@ -14,23 +13,21 @@ services:
       - postgres
     networks:
       - recipe_hub_networks
-
   postgres:
     image: postgres:14
     container_name: recipe-hub-postgres-container
     env_file:
       - .env
     environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_INIT_DB_ARGS: "--encoding=UTF8 --locale=pt_BR.UTF-8"
+      POSTGRES_USER: ${DB_USERNAME_PROD}
+      POSTGRES_PASSWORD: ${DB_PASSWORD_PROD}
+      POSTGRES_DB: ${DB_NAME_PROD}
     ports:
       - "5433:5432"
     networks:
       - recipe_hub_networks
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - ./data/prod:/var/lib/postgresql/data
     restart: unless-stopped
 
 networks:

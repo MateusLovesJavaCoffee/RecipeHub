@@ -12,8 +12,11 @@ import java.util.Optional;
 @Repository
 public interface IngredientRepository extends JpaRepository<Ingredient, Integer>, JpaSpecificationExecutor<Ingredient> {
 
+    @Override
     @Query("select i from Ingredient i left join fetch i.possibleUnits where i.id = :id")
-    Optional<Ingredient> findIngredientWithUnits(@Param("id") Integer id);
+    Optional<Ingredient> findById(@Param("id") Integer id);
 
     boolean existsByName(@Param("name") String name);
+
+
 }

@@ -1,20 +1,58 @@
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json # Comma-separated list of MIME types that should be compressed.
+    min-response-size: 1024
+  undertow:
+    threads:
+      worker: 40
+      io: 4
 spring:
+  flyway:
+    enabled: true
+    locations: classpath:h2/db/migration
+  application:
+    name: recipe-service
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
     username: sa
     password: password
-
-  flyway:
-    enabled: false
-#    locations: classpath:db/migration/h2
-    baseline-on-migrate: true
-    out-of-order: true
+    hikari:
+      auto-commit: false
+      connection-timeout: 250
+      max-lifetime: 600000
+      maximum-pool-size: 20
+      minimum-idle: 10
+      pool-name: master
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
   jpa:
+    open-in-view: false
+    show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     properties:
-      hibernate.dialect: org.hibernate.dialect.H2Dialect
-  sql:
-    init:
-      platform: h2
+      hibernate:
+      "[hibernate.dialect]": org.hibernate.dialect.PostgreSQLDialect
+      "[hibernate.generate_statistics]": false
+      "[hibernate.connection.provider_disables_autocommit]": true
+      defer-datasource-initialization: true
+      globally_quoted_identifiers: true
+  jackson:
+    deserialization:
+      fail-on-ignored-properties: true
+      fail-on-unknown-properties: true
+#  sql:
+#    init:
+#      schema-locations: tests/schema.sql
+#      data-locations: tests/data.sql
+#      mode: always
+  mvc:
+    throw-exception-if-no-handler-found: true

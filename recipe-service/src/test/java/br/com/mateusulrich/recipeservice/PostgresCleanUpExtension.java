@@ -1,6 +1,7 @@
 package br.com.mateusulrich.recipeservice;
 
 import br.com.mateusulrich.recipeservice.ingredient.repository.IngredientRepository;
+import br.com.mateusulrich.recipeservice.ingredient.repository.UnitOfMeasureRepository;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.data.repository.CrudRepository;
@@ -15,7 +16,10 @@ public class PostgresCleanUpExtension implements BeforeEachCallback {
         final var appContext = SpringExtension.getApplicationContext(context);
 
         cleanUp(List.of(
-                appContext.getBean(IngredientRepository.class)
+                appContext.getBean(IngredientRepository.class),
+                appContext.getBean(UnitOfMeasureRepository.class)
+
+
         ));
     }
 

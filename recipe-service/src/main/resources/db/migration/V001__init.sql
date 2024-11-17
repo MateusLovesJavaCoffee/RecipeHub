@@ -44,7 +44,7 @@ CREATE INDEX idx_recipe_title ON recipes (title);
 CREATE INDEX idx_recipe_difficulty ON recipes (difficulty);
 CREATE INDEX idx_recipe_published_at ON recipes (published_at);
 
-CREATE TABLE ingredient_composition (
+CREATE TABLE recipe_ingredients (
                                         recipe_id INTEGER NOT NULL,
                                         ingredient_id INTEGER NOT NULL,
                                         unit_of_measure_id INTEGER NOT NULL,
@@ -257,7 +257,7 @@ VALUES
 
 -- Inserção corrigida de ingredientes para as receitas
 
-INSERT INTO ingredient_composition (recipe_id, ingredient_id, unit_of_measure_id, amount, order_number, description)
+INSERT INTO recipe_ingredients (recipe_id, ingredient_id, unit_of_measure_id, amount, order_number, description)
 VALUES
 -- Chicken Salad
 (1, 6, 1, 200, 1, 'Chicken Breast, cooked and diced'),

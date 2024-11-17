@@ -1,18 +1,18 @@
 package br.com.mateusulrich.recipeservice.api.openapi;
 
-import br.com.mateusulrich.recipeservice.ingredient.dtos.IngredientResponse;
-import br.com.mateusulrich.recipeservice.recipe.dto.input.RecipeInstructionInput;
-import br.com.mateusulrich.recipeservice.recipe.dto.retrieve.InstructionResponse;
+import br.com.mateusulrich.recipeservice.api.dtos.ingredient.IngredientResponse;
+import br.com.mateusulrich.recipeservice.api.dtos.recipe.input.RecipeInstructionRequest;
+import br.com.mateusulrich.recipeservice.api.dtos.recipe.retrieve.InstructionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
-@Tag(name = "Recipe Instructions", description = "A API de passos de uma Receita permite a adição, edição e remoção de instruções utilizados na receita.")
+@Tag(name = "Receita Instrução", description = "A API de instruções de Receita permite a adição, edição e remoção de instruções utilizadas na receita.")
 public interface RecipeInstructionsOpenApi {
-
 
     @Operation(summary = "Adicionar uma Instrução passo a passo na Receita")
     @ApiResponses(value = {
@@ -22,7 +22,9 @@ public interface RecipeInstructionsOpenApi {
             @ApiResponse(responseCode = "422", description = "Erro de validação"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
-    ResponseEntity<InstructionResponse> createInstructionIntoRecipe(Integer recipeId, RecipeInstructionInput input);
+    ResponseEntity<InstructionResponse> createInstructionIntoRecipe(
+            @Parameter(description = "ID da Receita", required = true) Integer recipeId,
+            @RequestBody(description = "Representação dos dados para inserir uma instrução na receita", required = true)RecipeInstructionRequest input);
 
     @Operation(
             summary = "Atualizar uma Instrução na Receita")
@@ -34,8 +36,8 @@ public interface RecipeInstructionsOpenApi {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     ResponseEntity<Void> updateInstructionIntoRecipe(
-            Integer recipeId,
-            RecipeInstructionInput input);
+            @Parameter(description = "ID da Receita", required = true) Integer recipeId,
+            @RequestBody(description = "Representação dos dados para inserir um ingrediente na receita", required = true) RecipeInstructionRequest input);
 
     @Operation(summary = "Deleta uma Instrução na Receita pelo seu ID.")
     @ApiResponses(value = {

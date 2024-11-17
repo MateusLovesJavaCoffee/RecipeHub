@@ -11,9 +11,11 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -28,7 +30,9 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandle {
 
-        @ExceptionHandler(NotFoundException.class)
+    public static final String VALIDATION_ERRORS_DETAIL = "One or more fields are invalid. Please correct them and try again.";
+
+    @ExceptionHandler(NotFoundException.class)
         public ResponseEntity<ProblemDetail> NotFoundException(NotFoundException ex, HttpServletRequest request) {
             HttpStatus status = HttpStatus.NOT_FOUND;
             ProblemDetail problem = new ProblemDetail(
@@ -41,18 +45,25 @@ public class GlobalExceptionHandle {
 
         @ExceptionHandler(MethodArgumentNotValidException.class)
         public ResponseEntity<ProblemDetail> methodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
+
+            return handleBindException(ex, request);
+        }
+        @ExceptionHandler(BindException.class)
+        public ResponseEntity<ProblemDetail> handleBindException(BindException ex, HttpServletRequest request) {
             HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
-            ProblemDetail err = new ProblemDetail(
-                    "Invalid Method Argument(s)",
+            ProblemDetail problem = new ProblemDetail(
+                    "Validation Errors",
                     status,
-                    "One or more fields are invalid. Please correct them and try again.",
+                    VALIDATION_ERRORS_DETAIL,
                     request.getRequestURI()
+
             );
             for (FieldError f : ex.getBindingResult().getFieldErrors()) {
-                err.addError(f.getField(), f.getDefaultMessage());
+                problem.addError(f.getField(), f.getDefaultMessage());
             }
-            return ResponseEntity.status(status).body(err);
+            return ResponseEntity.status(status).body(problem);
         }
+
 
         @ExceptionHandler(EntityInUseException.class)
         public ResponseEntity<ProblemDetail> entityInUseException(EntityInUseException ex, HttpServletRequest request) {
@@ -105,6 +116,16 @@ public class GlobalExceptionHandle {
 //
 //            return ResponseEntity.status(status).body(problem);
 //        }
+
+        @ExceptionHandler(MissingServletRequestParameterException.class)
+        public ResponseEntity<ProblemDetail> missingServletRequestParameterException(MissingServletRequestParameterException ex, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String title = "Missing Request Parameter";
+        String detail = ex.getMessage();
+
+        ProblemDetail problemDetail = new ProblemDetail(title, status, detail, request.getRequestURI());
+        return ResponseEntity.status(status).body(problemDetail);
+        }
 
         @ExceptionHandler(NoHandlerFoundException.class)
         public ResponseEntity<ProblemDetail> noHandlerFoundException (NoHandlerFoundException ex, HttpServletRequest request) {

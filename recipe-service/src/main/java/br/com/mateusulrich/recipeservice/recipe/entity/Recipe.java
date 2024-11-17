@@ -1,5 +1,6 @@
 package br.com.mateusulrich.recipeservice.recipe.entity;
 
+import br.com.mateusulrich.recipeservice.api.dtos.recipe.input.RecipeRequest;
 import br.com.mateusulrich.recipeservice.ingredient.entities.Ingredient;
 import br.com.mateusulrich.recipeservice.ingredient.entities.UnitOfMeasure;
 import br.com.mateusulrich.recipeservice.recipe.enums.Difficulty;
@@ -30,6 +31,7 @@ public class Recipe {
     @Column(nullable = false, length = 100)
     private String title;
 
+    @Setter
     @Column(name = "img_url", length = 250)
     private String imgUrl;
 
@@ -73,7 +75,7 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @BatchSize(size = 20)
-    private Set<IngredientComposition> ingredientCompositions = new HashSet<>();
+    private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Instruction> instructions = new HashSet<>();
@@ -97,7 +99,18 @@ public class Recipe {
 
     @PrePersist @PreUpdate
     void onPersist() {
+        this.updatedAt = Instant.now();
         this.setReadyInMinutes(this.cookingMinutes + this.preparationMinutes);
+    }
+
+    public void update(RecipeRequest input) {
+        this.title = input.getTitle();
+        this.description = input.getDescription();
+        this.preparationMinutes = input.getPreparationMinutes();
+        this.cookingMinutes = input.getCookingMinutes();
+        this.servings = input.getServings();
+        this.difficulty = input.getDifficulty();
+        this.estimatedCost = input.getEstimatedCost();
     }
 
     public void addInstruction(Instruction instruction) {
@@ -109,12 +122,12 @@ public class Recipe {
         instruction.setRecipe(null);
     }
     public void addIngredientComposition(Ingredient ingredient, int amount, int order, String description, UnitOfMeasure unitOfMeasure) {
-        this.ingredientCompositions.add(new IngredientComposition(this, ingredient, amount, order, description, unitOfMeasure));
+        this.recipeIngredients.add(new RecipeIngredient(this, ingredient, amount, order, description, unitOfMeasure));
     }
     public void removeIngredientComposition(Ingredient ingredient) {
-        for (Iterator<IngredientComposition> iterator = ingredientCompositions.iterator();
+        for (Iterator<RecipeIngredient> iterator = recipeIngredients.iterator();
              iterator.hasNext(); ) {
-            IngredientComposition ingComp = iterator.next();
+            RecipeIngredient ingComp = iterator.next();
             if (ingComp.getRecipe().equals(this) && ingComp.getIngredient().equals(ingredient)) {
                 iterator.remove();
                 ingComp.setRecipe(null);
